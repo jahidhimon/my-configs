@@ -29,3 +29,6 @@ cp ~/.config/termite/config ./termite
 echo "termite conf copied successfully in /Termite"
 echo ""
 
+cp ~/.config/kitty/kitty.conf ./kitty
+echo "kitty conf copied successfully in /Kitty"
+echo ""
