@@ -49,8 +49,6 @@ let g:user_emmet_leader_key=','
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'voldikss/vim-floaterm'
-
 Plug 'honza/vim-snippets'
 
 " ** MARKDOWN
@@ -70,15 +68,10 @@ Plug 'preservim/tagbar'
 " ** autocomplete
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-Plug 'jordwalke/vim-reasonml'
-
 " ** tmux plugin
-Plug 'christoomey/vim-tmux-navigator'
-
 Plug 'tpope/vim-fugitive'
 
 Plug 'mbbill/undotree'
-" Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'vim-syntastic/syntastic'
 Plug 'psliwka/vim-smoothie'
 Plug 'Raimondi/delimitMate'
@@ -108,7 +101,6 @@ Plug 'kyoz/purify'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
 Plug 'sainnhe/gruvbox-material'
-Plug 'dracula/vim',{'as':'dracula'}
 
 call plug#end()
 
@@ -127,7 +119,6 @@ let g:instant_markdown_allow_unsafe_content=1
 set background=dark
 if has("gui_running")
   colorscheme palenight
-  let g:floaterm_borderchars=['', '', '', '', '', '', '', '']
 else
   colorscheme gruvbox-material
   let g:gruvbox_material_enable_italic = 1
@@ -158,10 +149,10 @@ let g:haskell_indent_disable=1
 nmap <F8> :TagbarToggle<CR>
 
 "  ** Pane
-nmap <silent> <c-k> :wincmd k<CR>
-nmap <silent> <c-j> :wincmd j<CR>
-nmap <silent> <c-h> :wincmd h<CR>
-nmap <silent> <c-l> :wincmd l<CR>
+nmap <silent> <c-a>k :wincmd k<CR>
+nmap <silent> <c-a>j :wincmd j<CR>
+nmap <silent> <c-a>h :wincmd h<CR>
+nmap <silent> <c-a>l :wincmd l<CR>
 " ** COC Settings
 set hidden
 
@@ -307,14 +298,7 @@ nnoremap <leader>f :Files<CR>
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
 nnoremap <leader>r :%s//gIc<Left><Left><Left><Left>
-
-" Floaterm
-let g:floaterm_keymap_next = '<A-n>'
-tnoremap <A-n> <C-\><C-n>:FloatermNext<CR>
-tnoremap <A-.> <C-\><C-n>:FloatermNew<CR>
-nnoremap <A-'> <C-\><C-n>:FloatermKill<space>
-hi FloatermBorder guibg=#2c323c guifg=grey
-
+"
 " Buffers
 nnoremap <leader>bo :Buffers<CR>
 nnoremap <leader>q :bw<CR>
