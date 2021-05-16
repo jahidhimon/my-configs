@@ -1,0 +1,31 @@
+#!/bin/sh
+# Extremely simple script for copying certain files
+
+cp ~/.tmux.conf ./tmux
+echo ".tmux.conf copied successfully in /Tmux"
+echo ""
+
+cp ~/.vimrc ./vim
+echo ".vimrc copied successfully in /vim"
+echo ""
+
+cp ~/.gvimrc ./vim
+echo ".gvimrc copied successfully in /vim"
+echo ""
+
+cp ~/.config/awesome/rc.lua ./awesomeWM
+echo "rc.lua copied successfully in /awesomeWM"
+echo ""
+
+cp ~/.config/awesome/theme.lua ./awesomeWM
+echo "theme.lua copied successfully in /awesomeWM"
+echo ""
+
+cp ~/.bashrc ./bash
+echo ".bashrc copied successfully in /Bash"
+echo ""
+
+cp ~/.config/termite/config ./termite
+echo "termite conf copied successfully in /Termite"
+echo ""
+
