@@ -149,10 +149,10 @@ let g:haskell_indent_disable=1
 nmap <F8> :TagbarToggle<CR>
 
 "  ** Pane
-nmap <silent> <c-a>k :wincmd k<CR>
-nmap <silent> <c-a>j :wincmd j<CR>
-nmap <silent> <c-a>h :wincmd h<CR>
-nmap <silent> <c-a>l :wincmd l<CR>
+nmap <silent> <c-k> :wincmd k<CR>
+nmap <silent> <c-j> :wincmd j<CR>
+nmap <silent> <c-h> :wincmd h<CR>
+nmap <silent> <c-l> :wincmd l<CR>
 " ** COC Settings
 set hidden
 
@@ -298,7 +298,7 @@ nnoremap <leader>f :Files<CR>
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
 nnoremap <leader>r :%s//gIc<Left><Left><Left><Left>
-"
+
 " Buffers
 nnoremap <leader>bo :Buffers<CR>
 nnoremap <leader>q :bw<CR>
