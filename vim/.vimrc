@@ -141,6 +141,12 @@ vmap a= :Tabularize /=<CR>
 vmap a; :Tabularize /::<CR>
 vmap a- :Tabularize /-><CR>
 
+" ** vim slime 
+let g:slime_target = "tmux"
+let g:slime_default_config = {"socket_name": "default", "target_pane": ":.1"}
+
+ 
+
 " ** Haskell vim
 let g:haskell_classic_highlighting=1
 let g:haskell_indent_disable=1
@@ -153,6 +159,7 @@ nmap <silent> <c-k> :wincmd k<CR>
 nmap <silent> <c-j> :wincmd j<CR>
 nmap <silent> <c-h> :wincmd h<CR>
 nmap <silent> <c-l> :wincmd l<CR>
+
 " ** COC Settings
 set hidden
 
