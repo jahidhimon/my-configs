@@ -177,9 +177,4 @@ if [[ "${TERMINAL_EMULATOR}" =~ tmux ]]; then
 else
     export TERMINAL_EMULATOR
 fi
-
-if [ $TERMINAL_EMULATOR == "kitty" ] || [ $TERMINAL_EMULATOR == "termite" ];
-then
-  $HOME/fm6000 -f $HOME/wolf.txt -c random -l 20
-fi
-
+export EDITOR="nvim"
