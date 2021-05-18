@@ -5,6 +5,14 @@ cp ~/.tmux.conf ./tmux
 echo ".tmux.conf copied successfully in /Tmux"
 echo ""
 
+cp ~/.tmux/left_status.sh ./tmux
+echo ".tmux/left_status copied successfully in /Tmux"
+echo ""
+
+cp ~/.tmux/right_status.sh ./tmux
+echo ".tmux/right_status copied successfully in /Tmux"
+echo ""
+
 cp ~/.vimrc ./vim
 echo ".vimrc copied successfully in /vim"
 echo ""
