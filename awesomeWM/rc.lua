@@ -508,7 +508,7 @@ globalkeys = my_table.join(
     -- User programs
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
               {description = "run browser", group = "launcher"}),
-    awful.key({ modkey }, "e", function () awful.spawn("thunar") end,
+    awful.key({ modkey }, "e", function () awful.spawn("pcmanfm") end,
               {description = "launch file_manager", group = "launcher"}),
     awful.key({ }, "XF86Calculator", function () awful.spawn("speedcrunch") end,
               {description = "lauch speedCruch calculator", group = "launcher"}),
@@ -560,15 +560,14 @@ globalkeys = my_table.join(
               {description = "xkill", group = "Applicatons"}),
 
     awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run {
-                    prompt       = "Run Lua code: ",
-                    textbox      = awful.screen.focused().mypromptbox.widget,
-                    exe_callback = awful.util.eval,
-                    history_path = awful.util.get_cache_dir() .. "/history_eval"
-                  }
-              end,
-              {description = "lua execute prompt", group = "awesome"})
+        function ()
+            -- The client currently has the input focus, so it cannot be
+            -- minimized, since minimized clients can't have the focus.
+            if client.focus then
+              client.focus.minimized = true
+            end
+        end ,
+        {description = "minimize", group = "client"})
     --]]
 )
 
@@ -591,13 +590,13 @@ clientkeys = my_table.join(
               {description = "move to screen", group = "client"}),
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
-    awful.key({ modkey,           }, "n",
-        function (c)
-            -- The client currently has the input focus, so it cannot be
-            -- minimized, since minimized clients can't have the focus.
-            c.minimized = true
-        end ,
-        {description = "minimize", group = "client"}),
+    -- awful.key({ modkey,           }, "n",
+    --     function (c)
+    --         -- The client currently has the input focus, so it cannot be
+    --         -- minimized, since minimized clients can't have the focus.
+    --         c.minimized = true
+    --     end ,
+    --     {description = "minimize", group = "client"}),
     awful.key({ modkey,           }, "m",
         function (c)
             c.maximized = not c.maximized
