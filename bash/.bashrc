@@ -178,3 +178,6 @@ else
     export TERMINAL_EMULATOR
 fi
 export EDITOR="nvim"
+
+tre() { command tre "$@" -e && source "/tmp/tre_aliases_$USER" 2>/dev/null; }
+

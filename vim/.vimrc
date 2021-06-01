@@ -21,6 +21,7 @@ set smartindent
 set smartcase
 set relativenumber
 set number
+set autoread
 
 set nobackup
 set undodir=~/.vim/undodir
@@ -82,7 +83,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'cespare/vim-toml'
 Plug 'jpalardy/vim-slime'
 Plug 'vim-airline/vim-airline'
-" Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
@@ -141,11 +142,11 @@ vmap a= :Tabularize /=<CR>
 vmap a; :Tabularize /::<CR>
 vmap a- :Tabularize /-><CR>
 
-" ** vim slime 
+" ** vim slime
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": ":.1"}
 
- 
+
 
 " ** Haskell vim
 let g:haskell_classic_highlighting=1
@@ -224,7 +225,7 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>fr <Plug>(coc-rename)
 
 " Formatting selected code.
 xmap <leader>b<S-f> <Plug>(coc-format-selected)
@@ -243,12 +244,12 @@ augroup end
 
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>fa  <Plug>(coc-codeaction-selected)
 
 " Remap keys for applying codeAction to the current buffer.
-nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>fc  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
-nmap <leader>bfx  <Plug>(coc-fix-current)
+nmap <leader>fx  <Plug>(coc-fix-current)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -282,7 +283,7 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <leader>fd  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
 nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
 " Show commands.
@@ -300,14 +301,14 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 "fzf
 nnoremap <leader>gl :Lines<CR>
-nnoremap <leader>f :Files<CR>
+nnoremap <leader>gf :Files<CR>
 "which key
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
 nnoremap <leader>r :%s//gIc<Left><Left><Left><Left>
 
 " Buffers
-nnoremap <leader>bo :Buffers<CR>
+nnoremap <leader>gb :Buffers<CR>
 nnoremap <leader>q :bw<CR>
 nnoremap <C-n> :bnext<CR>
 nnoremap <C-p> :bprev<CR>

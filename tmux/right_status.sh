@@ -51,7 +51,7 @@ function load_average() {
 
 function date_time() {
 
-  printf "%s" "$(date +'[%r]')"
+  printf "%s" "$(date +'[%d %b %a] [%r]')"
 
 }
 
@@ -67,8 +67,7 @@ function internet_status(){
     if [ "$status" == "up" ] ; then
       let connection=1
       # ip addr show $iface | awk '/inet /{printf $2"] "}'
-
-    fi
+fi
 
   done
 
@@ -81,15 +80,23 @@ function internet_status(){
 }
 
 function memory_usage() {
-
+  local fgdefault='#[fg=colour40]'
   if [ "$(which bc)" ]; then
     # Display used, total, and percentage of memory using the free command.
-    read used total <<< $(free -m | awk '/Mem/{printf $2" "$3}')
+    read total used <<< $(free -m | awk '/Mem/{printf $2" "$3}')
     # Calculate the percentage of memory used with bc.
-    percent=$(bc -l <<< "100 * $total / $used")
+    percent=$(bc -l <<< "100 * $used / $total")
+    # if [$percent -lt 10]; then
+    #   fgcolorofram='#[fg=colour144]'
+    #   printf "[${fgcolorofram}${used}M${fgdefault}/${total}M] "
+    # elif [$percent -lt 50]; then
+    #   fgcolorofram='#[fg=colour35]'
+    #   printf "[${fgcolorofram}${used}M${fgdefault}/${total}M] "
+    # fi
     # Feed the variables into awk and print the values with formating.
     # awk -v u=$used -v t=$total -v p=$percent 'BEGIN {printf "[%sMi/%sMi %.1f%] ", t, u, p}'
-    awk -v u=$used -v t=$total -v p=$percent 'BEGIN {printf "[%sM/%sM] ", t, u}'
+    # awk -v u=$used -v t=$total -v p=$percent 'BEGIN {printf "[${fg-color}%sM${fgdefault}/%sM] ", t, u}'
+    printf "[${fgdefault}${used}M${fgdefault}/${total}M] "
   fi
 }
 
