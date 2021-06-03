@@ -15,7 +15,6 @@ local beautiful     = require("beautiful")
 local naughty       = require("naughty")
 local lain          = require("lain")
 --local menubar       = require("menubar")
-local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
                       require("awful.hotkeys_popup.keys")
 local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
@@ -83,7 +82,7 @@ local browser      = os.getenv("BROWSER") or "qutebrowser"
 local scrlocker    = "slock"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "dev", "web", "docs", "media" }
+awful.util.tagnames = { "1", "2", "3", "4", "5" }
 awful.layout.layouts = {
     -- awful.layout.suit.floating,
     awful.layout.suit.tile,
@@ -184,20 +183,6 @@ local myawesomemenu = {
     { "restart", awesome.restart },
     { "quit", function() awesome.quit() end }
 }
-awful.util.mymainmenu = freedesktop.menu.build({
-    icon_size = beautiful.menu_height or dpi(16),
-    before = {
-        { "Awesome", myawesomemenu, beautiful.awesome_icon },
-        -- other triads can be put here
-    },
-    after = {
-        { "Open terminal", terminal },
-        -- other triads can be put here
-    }
-})
-
--- hide menu when mouse leaves it
-awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function() awful.util.mymainmenu:hide() end)
 
 --menubar.utils.terminal = terminal -- Set the Menubar terminal for applications that require it
 -- }}}
@@ -233,7 +218,6 @@ awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) 
 
 -- {{{ Mouse bindings
 root.buttons(my_table.join(
-    awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -550,7 +534,8 @@ globalkeys = my_table.join(
 -- 		 -kb-row-select "Tab" -kb-row-tab ""
     -- Rofi
     awful.key({ altkey }, "space", function ()
-            os.execute(string.format("rofi -lines 5 -columns 3 -font \"mono 9\" -modi combi -combi-modi window,run,drun,ssh -show run -opacity 70"))
+            -- os.execute(string.format("rofi -lines 5 -columns 3 -font \"mono 9\" -modi combi -combi-modi window,run,drun,ssh -show run -display-run '' -theme glue_pro_blue -opacity 10"))
+            os.execute("rofi -show run -display-run '' -modi run -location 1 -width 100 -lines 2 -line-margin 0 -line-padding 1 -separator-style none -font 'mono 10' -columns 9 -bw 0  -hide-scrollbar -color-window '#222222, #222222, #b1b4b3' -color-normal '#222222, #b1b4b3, #222222, #005577, #b1b4b3' -color-active '#222222, #b1b4b3, #222222, #007763, #b1b4b3' -color-urgent '#222222, #b1b4b3, #222222, #77003d, #b1b4b3' -kb-row-select 'Tab' -kb-row-tab '' -theme glue_pro_blue")
         end,
               {description = "run Rofi", group = "launcher"}),
 
@@ -789,9 +774,10 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- Session startup
-awful.spawn.with_shell("xrandr --output eDP1 --primary --mode 1366x768 --output DP1 --mode 1366x768 --right-of eDP1")
+-- awful.spawn.with_shell("xrandr --output eDP1 --primary --mode 1366x768 --output DP1 --mode 1366x768 --right-of eDP1")
 awful.spawn.with_shell("xcompmgr")
 awful.spawn.with_shell("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+-- awful.spawn.with_shell("fehbg &")
 awful.spawn.with_shell("nitrogen --restore")
 
 
