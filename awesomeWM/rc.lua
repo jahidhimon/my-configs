@@ -72,7 +72,7 @@ awful.spawn.with_shell(
 
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "kitty"
+local terminal     = "alacritty"
 local vi_focus     = false -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
 local editor       = os.getenv("EDITOR") or "vim"
