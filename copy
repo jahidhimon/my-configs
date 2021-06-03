@@ -41,6 +41,6 @@ cp ~/.config/kitty/kitty.conf ./kitty
 echo "kitty conf copied successfully in /Kitty"
 echo ""
 
-cp ~/.config/alacritty/alacritty.yml
+cp ~/.config/alacritty/alacritty.yml ./alacritty
 echo "alacritty.yml copied successfully in /alacritty"
 echo ""
