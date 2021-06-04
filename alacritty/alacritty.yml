@@ -1,0 +1,205 @@
+env:
+  TERM: xterm-kitty
+window:
+  dimensions:
+    columns: 0
+    lines: 0
+  padding:
+    x: 5
+    y: 5
+  decorations: full
+scrolling:
+  history: 10000
+  multiplier: 100
+  faux_multiplier: 100
+  auto_scroll: true
+tabspaces: 4
+font:
+  normal:
+    family: Hack
+  bold:
+    family: Hack
+  italic:
+    family: Hack
+  size: 9.5
+  offset:
+    x: 0
+    y: 0
+  glyph_offset:
+    x: 0
+    y: 0
+render_timer: false
+draw_bold_text_with_bright_colors: true
+colors:
+  primary:
+    background: "#000000"
+    foreground: "#dddddd"
+  normal:
+    black: "#000000"
+    red: "#cc0403"
+    green: "#19cb00"
+    yellow: "#cecb00"
+    blue: "#0d73cc"
+    magenta: "#cb1ed1"
+    cyan: "#0dcdcd"
+    white: "#dddddd"
+  bright:
+    black: "#767676"
+    red: "#f2201f"
+    green: "#23fd00"
+    yellow: "#fffd00"
+    blue: "#1a8fff"
+    magenta: "#fd28ff"
+    cyan: "#14ffff"
+    white: "#ffffff"
+bell:
+  animation: EaseOutExpo
+  duration: 0
+background_opacity: 0.9
+mouse_bindings:
+  - mouse: Middle
+    action: PasteSelection
+mouse:
+  double_click:
+    threshold: 300
+  triple_click:
+    threshold: 300
+  hide_when_typing: false
+  url:
+    launcher: xdg-open
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+  save_to_clipboard: false
+dynamic_title: true
+cursor:
+  style: Block
+  unfocused_hollow: true
+live_config_reload: true
+shell:
+  program: /bin/bash
+key_bindings:
+  - key: V
+    mods: Control|Shift
+    action: Paste
+  - key: C
+    mods: Control|Shift
+    action: Copy
+  - key: Paste
+    action: Paste
+  - key: Copy
+    action: Copy
+  - key: Q
+    mods: Command
+    action: Quit
+  - key: W
+    mods: Command
+    action: Quit
+  - key: Insert
+    mods: Shift
+    action: PasteSelection
+  - key: Key0
+    mods: Control
+    action: ResetFontSize
+  - key: Home
+    chars: "\eOH"
+    mode: AppCursor
+  - key: Home
+    chars: "\e[H"
+    mode: ~AppCursor
+  - key: End
+    chars: "\eOF"
+    mode: AppCursor
+  - key: End
+    chars: "\e[F"
+    mode: ~AppCursor
+  - key: PageUp
+    mods: Shift
+    chars: "\e[5;2~"
+  - key: PageUp
+    mods: Control
+    chars: "\e[5;5~"
+  - key: PageUp
+    chars: "\e[5~"
+  - key: PageDown
+    mods: Shift
+    chars: "\e[6;2~"
+  - key: PageDown
+    mods: Control
+    chars: "\e[6;5~"
+  - key: PageDown
+    chars: "\e[6~"
+  - key: Tab
+    mods: Shift
+    chars: "\e[Z"
+  - key: Back
+    chars: ""
+  - key: Back
+    mods: Alt
+    chars: "\e"
+  - key: Insert
+    chars: "\e[2~"
+  - key: Delete
+    chars: "\e[3~"
+  - key: Left
+    mods: Shift
+    chars: "\e[1;2D"
+  - key: Left
+    mods: Control
+    chars: "\e[1;5D"
+  - key: Left
+    mods: Alt
+    chars: "\e[1;3D"
+  - key: Left
+    chars: "\e[D"
+    mode: ~AppCursor
+  - key: Left
+    chars: "\eOD"
+    mode: AppCursor
+  - key: Right
+    mods: Shift
+    chars: "\e[1;2C"
+  - key: Right
+    mods: Control
+    chars: "\e[1;5C"
+  - key: Right
+    mods: Alt
+    chars: "\e[1;3C"
+  - key: Right
+    chars: "\e[C"
+    mode: ~AppCursor
+  - key: Right
+    chars: "\eOC"
+    mode: AppCursor
+  - key: Up
+    mods: Shift
+    chars: "\e[1;2A"
+  - key: Up
+    mods: Control
+    chars: "\e[1;5A"
+  - key: Up
+    mods: Alt
+    chars: "\e[1;3A"
+  - key: Up
+    chars: "\e[A"
+    mode: ~AppCursor
+  - key: Up
+    chars: "\eOA"
+    mode: AppCursor
+  - key: Down
+    mods: Shift
+    chars: "\e[1;2B"
+  - key: Down
+    mods: Control
+    chars: "\e[1;5B"
+  - key: Down
+    mods: Alt
+    chars: "\e[1;3B"
+  - key: Down
+    chars: "\e[B"
+    mode: ~AppCursor
+  - key: Down
+    chars: "\eOB"
+    mode: AppCursor
+de: AppCursor
+sor: null
+l: null
