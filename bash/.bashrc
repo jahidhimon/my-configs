@@ -141,6 +141,7 @@ ex ()
 # MY_THINGS
 
 set -o vi
+
 bind -m vi-insert "\C-l":clear-screen
 bind -m vi-command "\C-l":clear-screen
 
@@ -164,7 +165,7 @@ alias xterm="xterm -bg black -fg white & disown"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# eval "$(starship init bash)"
+# eval "$(starship init fish)"
 
 source /home/xploit/.config/my_scripts/bash_functions.bash
 

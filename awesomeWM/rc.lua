@@ -507,11 +507,11 @@ globalkeys = my_table.join(
               {description = "show the menubar", group = "launcher"})
     --]]
     -- dmenu
-    awful.key({ altkey }, "p", function ()
-            os.execute(string.format("dmenu_run -i -fn 'Terminus-8.5' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
-            beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
-        end,
-        {description = "show dmenu", group = "launcher"}),
+    -- awful.key({ altkey }, "p", function ()
+    --         os.execute(string.format("dmenu_run -i -fn 'Terminus-8.5' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
+    --         beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
+    --     end,
+    --     {description = "show dmenu", group = "launcher"}),
     -- alternatively use rofi, a dmenu-like application with more features
     -- check https://github.com/DaveDavenport/rofi for more details
     --[[ rofi
@@ -533,9 +533,9 @@ globalkeys = my_table.join(
 -- 		 -color-urgent "#222222, #b1b4b3, #222222, #77003d, #b1b4b3" \
 -- 		 -kb-row-select "Tab" -kb-row-tab ""
     -- Rofi
-    awful.key({ altkey }, "space", function ()
+    awful.key({ altkey }, "p", function ()
             -- os.execute(string.format("rofi -lines 5 -columns 3 -font \"mono 9\" -modi combi -combi-modi window,run,drun,ssh -show run -display-run '' -theme glue_pro_blue -opacity 10"))
-            os.execute("rofi -show run -display-run '' -modi run -location 1 -width 100 -lines 2 -line-margin 0 -line-padding 1 -separator-style none -font 'mono 10' -columns 9 -bw 0  -hide-scrollbar -color-window '#222222, #222222, #b1b4b3' -color-normal '#222222, #b1b4b3, #222222, #005577, #b1b4b3' -color-active '#222222, #b1b4b3, #222222, #007763, #b1b4b3' -color-urgent '#222222, #b1b4b3, #222222, #77003d, #b1b4b3' -kb-row-select 'Tab' -kb-row-tab '' -theme glue_pro_blue")
+            os.execute("rofi -show run -display-run '' -modi run -location 1 -width 100 -lines 2 -line-margin 0 -line-padding 1 -separator-style none -font 'mono 9' -columns 9 -hide-scrollbar -theme glue_pro_blue")
         end,
               {description = "run Rofi", group = "launcher"}),
 
