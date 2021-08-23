@@ -75,8 +75,8 @@ local altkey       = "Mod1"
 local terminal     = "kitty"
 local vi_focus     = false -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
-local editor       = os.getenv("EDITOR") or "vim"
-local gui_editor   = os.getenv("GUI_EDITOR") or "emacs"
+local editor       = os.getenv("EDITOR") or "runemacs"
+local gui_editor   = os.getenv("GUI_EDITOR") or "runemacs"
 local browser      = os.getenv("BROWSER") or "qutebrowser"
 -- local scrlocker    = "slock"
 local scrlocker    = "slock"
@@ -414,9 +414,7 @@ globalkeys = my_table.join(
     --           {description = "show calendar", group = "widgets"}),
     awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
               {description = "show filesystem", group = "widgets"}),
-    awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
-              {description = "show weather", group = "widgets"}),
-
+    
     -- Brightness
     awful.key({ modkey, altkey }, "Up", function () os.execute("xbacklight -inc 10") end,
               {description = "+10%", group = "hotkeys"}),
@@ -492,13 +490,13 @@ globalkeys = my_table.join(
     -- User programs
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
               {description = "run browser", group = "launcher"}),
-    awful.key({ modkey }, "e", function () awful.spawn("pcmanfm") end,
+    awful.key({ modkey }, "e", function () awful.spawn("thunar") end,
               {description = "launch file_manager", group = "launcher"}),
     awful.key({ }, "XF86Calculator", function () awful.spawn("speedcrunch") end,
               {description = "lauch speedCruch calculator", group = "launcher"}),
     awful.key({ modkey }, "a", function () awful.spawn(gui_editor) end,
               {description = "run gui editor", group = "launcher"}),
-    awful.key({ }, "Print", function () awful.util.spawn("xfce4-screenshooter -c -r -s /home/xploit/Pictures/screenshots/") end,
+    awful.key({ }, "Print", function () awful.util.spawn("flameshot gui -p /home/xploit/Pictures/screenshots/") end,
               {description = "Screenshot", group = "Utility"}),
 
     -- Default
@@ -687,12 +685,16 @@ awful.rules.rules = {
     { rule_any = { type = { "dialog", "normal" } },
       properties = { titlebars_enabled = false } },
 
-    -- Set Firefox to always map on the first tag on screen 1.
-    { rule = { class = "Firefox" },
-      properties = { screen = 1, tag = awful.util.tagnames[1] } },
+    -- Set Emacs to always map on the first tag on screen 1.
+    { rule = { instance = "emacs" },
+      properties = { screen = 2, tag = awful.util.tagnames[1], fullscreen=true , switchtotag=true} },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
+    { rule = {instance = "telegram-desktop"},
+      properties = { screen = 1, tag = "3", maximized=true}},
+    { rule = { instance = "transmission-gtk" },
+      properties = {screen = 1, tag = "5", maximized=true}},
 }
 -- }}}
 
@@ -776,9 +778,11 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Session startup
 -- awful.spawn.with_shell("xrandr --output eDP1 --primary --mode 1366x768 --output DP1 --mode 1366x768 --right-of eDP1")
 awful.spawn.with_shell("xcompmgr")
+awful.spawn.with_shell("birdtray")
 awful.spawn.with_shell("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 -- awful.spawn.with_shell("fehbg &")
 awful.spawn.with_shell("nitrogen --restore")
+awful.spawn.with_shell("emacs --daemon")
 
 
 beautiful.useless_gap = 5

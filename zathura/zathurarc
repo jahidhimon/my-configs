@@ -1,6 +1,5 @@
-set adjust-opn "best-fit"
+set adjust-open "best-fit"
 
-set smooth-scroll "true"
 set scroll-page-aware "true"
 
 set statusbar-fg "#10AC1E" #04
@@ -14,8 +13,8 @@ unmap <C-b>
 map <C-b> toggle_statusbar
 map [fullscreen] <C-b> toggle_statusbar
 
-unmap J
-map J zoom in
+unmap <C-i>
+map <C-i> zoom in
 
-unmap K
-map K zoom out
+unmap <C-o>
+map <C-o> zoom out

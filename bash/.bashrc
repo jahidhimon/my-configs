@@ -182,3 +182,9 @@ export EDITOR="nvim"
 
 tre() { command tre "$@" -e && source "/tmp/tre_aliases_$USER" 2>/dev/null; }
 
+export TZ="/usr/share/zoneinfo/Asia/Dhaka"
+export CHROME_EXECUTABLE=chromium
+
+alias start_android="~/Android/Sdk/tools/emulator -avd Pixel_2_API_27"
+
+export GOPATH="/home/xploit/codes/go/"
