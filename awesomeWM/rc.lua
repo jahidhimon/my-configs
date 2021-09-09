@@ -490,13 +490,13 @@ globalkeys = my_table.join(
     -- User programs
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
               {description = "run browser", group = "launcher"}),
-    awful.key({ modkey }, "e", function () awful.spawn("thunar") end,
+    awful.key({ modkey }, "e", function () awful.spawn("nautilus") end,
               {description = "launch file_manager", group = "launcher"}),
     awful.key({ }, "XF86Calculator", function () awful.spawn("speedcrunch") end,
               {description = "lauch speedCruch calculator", group = "launcher"}),
     awful.key({ modkey }, "a", function () awful.spawn(gui_editor) end,
               {description = "run gui editor", group = "launcher"}),
-    awful.key({ }, "Print", function () awful.util.spawn("flameshot gui -p /home/xploit/Pictures/screenshots/") end,
+    awful.key({ }, "Print", function () awful.util.spawn("flameshot gui -p /home/imon/Pictures/screenshots/") end,
               {description = "Screenshot", group = "Utility"}),
 
     -- Default
@@ -779,7 +779,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- awful.spawn.with_shell("xrandr --output eDP1 --primary --mode 1366x768 --output DP1 --mode 1366x768 --right-of eDP1")
 awful.spawn.with_shell("xcompmgr")
 awful.spawn.with_shell("birdtray")
-awful.spawn.with_shell("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+awful.spawn.with_shell("/usr/libexec/polkit-gnome-authentication-agent-1")
 -- awful.spawn.with_shell("fehbg &")
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("emacs --daemon")
