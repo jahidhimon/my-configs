@@ -278,9 +278,6 @@ This package colorizes brackets like rainbow
       "ld"  '(lsp-find-definition :which-key "Definition")
       "la"  '(lsp-execute-code-action :which-key "Code Action")
 
-      "k"  '(kill-current-buffer :which-key "Kill Buffer")
-      "K"  '(kill-buffer-and-window :which-key "Buffer and window")
-
       "p"  '(projectile-command-map :which-key "Projectile")
 
       "w"  '(:ignore t :which-key "Window")
@@ -321,8 +318,6 @@ This package colorizes brackets like rainbow
       "[B" '(sp-backward-barf-sexp :which-key "Backward Barf")
       "[h" '(sp-forward-slurp-hybrid-sexp :which-key "Hybrid S Forward")
       "[H" '(sp-backward-slurp-hybrid-sexp :which-key "Hybrid S Forward")
-
-      "b"  '(counsel-switch-buffer :which-key "Buffers")
 
       "f"   '(:ignore t :which-key "File")
       "ff"  '(find-file :which-key "Find Files")
@@ -805,6 +800,18 @@ This is a very important packages for me. Because I like to open only one dired 
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "H" 'dired-hide-dotfiles-mode))
+#+end_src
+
+* Perspective
+#+begin_src emacs-lisp
+  (use-package perspective
+    :ensure t
+	  :init (persp-mode)
+    :config 
+    (myconfig/leader-keys
+      "x" '(perspective-map :which-key "Perspective")
+      "b" '(persp-counsel-switch-buffer :which-key "Switch Buffer")
+      "k" '(persp-kill-buffer* :which-key "Kill buffer")))
 #+end_src
 
 * Programming tools and Tweaks
