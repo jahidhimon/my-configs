@@ -293,7 +293,9 @@ This package colorizes brackets like rainbow
       "wb" '(counsel-switch-buffer-other-window :which-key "Buffers Other Window")
 
       "e"  '(:ignore t :which-key "Eval")
-      "es" '(eval-last-sexp :which-key "Last Sexp")
+
+      "es" '(shell-command :which-key "Shell Command")
+      "el" '(eval-last-sexp :which-key "Last Sexp")
       "eb" '(eval-buffer :which-key "Buffer")
       "er" '(eval-region :which-key "Region")
       "ed" '(eval-defun :which-key "Defun")
@@ -302,6 +304,7 @@ This package colorizes brackets like rainbow
       "o"  '(:ignore t :which-key "Open")
       "oe" '(eshell    :which-key "Eshell")
       "od" '(dired     :which-key "Dired")
+	  "ov" '(vterm     :which-key "Vterm")
       "oc" '(calendar  :which-key "Calendar")
       "op" '(org-timer-set-timer :which-key "Pomodoro")
 
@@ -310,7 +313,6 @@ This package colorizes brackets like rainbow
       "[{" '(sp-wrap-curly :which-key "{}")
       "[[" '(sp-wrap-square :which-key "[]")
       "[d" '(sp-splice-sexp :which-key "Splice Sexp")
-      "[\"" '(sp-wrap)
       "[r" '(sp-rewrap-sexp :which-key "Rewrap Sexp")
       "[s" '(sp-forward-slurp-sexp :which-key "Forward Slurp")
       "[S" '(sp-backward-slurp-sexp :which-key "Backward Slurp")
