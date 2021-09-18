@@ -865,7 +865,7 @@ This is a very important packages for me. Because I like to open only one dired 
     :config (projectile-mode)
     :init
     (when (file-directory-p "~/codes/")
-      (setq projectile-project-search-path '("~/codes/clojure/" "~/codes/c/" "~/codes/rust/" "~/codes/flutter/" "~/codes/rust/" "~/codes/go/" "~/codes/web/" "~/codes/go/" "~/codes/haskell/" "~/codes/java/")))
+      (setq projectile-project-search-path '("~/codes/clojure/" "~/codes/c/" "~/codes/rust/" "~/codes/flutter/" "~/codes/rust/" "~/codes/go/" "~/codes/web/" "~/codes/go/" "~/codes/haskell/" "~/codes/java/" "~/codes/pyt")))
     (setq projectile-switch-project-action #'projectile-dired))
 
   (use-package counsel-projectile ;; This package binds counsel and projectile together
@@ -940,15 +940,12 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+end_src
 
-** Rustic Mode for Rust
+** Rust
 
 #+begin_src emacs-lisp
 
-  (use-package rustic
-    :ensure
-    :config
-    ;; comment to disable rustfmt on save
-    (setq rustic-format-on-save t))
+    (use-package rustic
+      :ensure t)
 
 #+end_src
 
