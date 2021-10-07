@@ -17,37 +17,25 @@ cp ~/.vimrc ./vim
 echo ".vimrc copied successfully in ./vim"
 echo ""
 
-cp ~/.gvimrc ./vim
-echo ".gvimrc copied successfully in ./vim"
+cp -r ~/.config/nvim/* ./nvim/
+echo ".vimrc copied successfully in ./vim"
 echo ""
 
-cp ~/.config/awesome/rc.lua ./awesomeWM
+cp -r ~/.config/awesome/* ./awesomeWM
 echo "rc.lua copied successfully in ./awesomeWM"
-echo ""
-
-cp ~/.config/awesome/theme.lua ./awesomeWM
-echo "theme.lua copied successfully in ./awesomeWM"
 echo ""
 
 cp ~/.bashrc ./bash
 echo ".bashrc copied successfully in ./Bash"
 echo ""
 
-cp ~/.inputrc ./bash
-echo ".inputrc copied successfully in ./Bash"
-echo ""
-
-cp ~/.config/termite/config ./termite
-echo "termite conf copied successfully in ./Termite"
-echo ""
-
 cp ~/.config/kitty/kitty.conf ./kitty
 echo "kitty conf copied successfully in ./Kitty"
 echo ""
 
-cp ~/.config/alacritty/alacritty.yml ./alacritty
-echo "alacritty.yml copied successfully in ./alacritty"
-echo ""
+# cp ~/.config/alacritty/alacritty.yml ./alacritty
+# echo "alacritty.yml copied successfully in ./alacritty"
+# echo ""
 
-cp /etc/zathurarc ./zathura
+cp ~/.config/zathura/zathurarc ./zathura
 echo "zathurarc copied successfully in ./zathurarc"

@@ -966,15 +966,27 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+begin_src emacs-lisp
 
-  (use-package haskell-mode
-    :ensure t
-    :hook (haskell-mode . lsp-deferred)
-    :config
-    (setq lsp-headerline-breadcrumb-icons-enable nil))
+    (use-package haskell-mode
+      :ensure t
+      :hook (haskell-mode . lsp-deferred)
+      :config
+      (setq lsp-headerline-breadcrumb-icons-enable nil))
 
-  (use-package lsp-haskell ;; LSP does not suppor Haskell by Default
-    :ensure t)
+    (use-package lsp-haskell ;; LSP does not suppor Haskell by Default
+      :ensure t)
 
+    (use-package hindent
+      :hook (haskell-mode . hindent-mode))
+
+    ;; (add-hook 'haskell-mode-hook #'hindent-mode)
+
+#+end_src
+
+** Clojure Mode
+#+begin_src emacs-lisp
+  (use-package clojure-mode
+    :hook (clojure-mode . lsp-deferred))
+  (use-package cider)
 #+end_src
 
 ** Golang Mode
@@ -1043,7 +1055,18 @@ This is a very important packages for me. Because I like to open only one dired 
     :ensure nil
     :hook (python-mode . lsp-deferred)
     :custom
-    (python-shell-interpreter "python3"))
+    (python-shell-interpreter "python3")
+    :config
+      (myconfig/leader-keys
+        "c"  '(:ignore t :which-key "REPL")
+        "cp" '(run-python :which-key "Run Python Repl")
+        "cc" '(python-shell-switch-to-shell :which-key "Switch to Shell")
+        "cl" '(python-shell-send-file :which-key "Send File")
+        "cd" '(python-shell-send-defun :which-key "Send Defun")
+        "cs" '(python-shell-send-string :which-key "Send String")
+        "cb" '(python-shell-send-buffer :which-key "Send Buffer")
+        "cr" '(python-shell-send-region :which-key "Send Region")
+			  "ce" '(python-shell-send-statement :which-key "Send Statement")))
 
 #+end_src
 

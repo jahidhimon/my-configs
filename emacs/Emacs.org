@@ -107,14 +107,13 @@ Make gc pauses faster by decreasing the threshold.
 #+begin_src emacs-lisp
 
   (column-number-mode)
-  (global-display-line-numbers-mode nil)
-  (menu-bar--display-line-numbers-mode-relative)
+  (global-display-line-numbers-mode t)
 
   ;; Set frame transparency
 
   ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
-                  term-mode-hook
+                  vterm-mode-hook
                   shell-mode-hook
                   treemacs-mode-hook
                   eshell-mode-hook))
@@ -126,18 +125,19 @@ Make gc pauses faster by decreasing the threshold.
 
 #+begin_src emacs-lisp
 
-    (defun myconfig/set-font-face ()
-      "This is somewhat documentation."
-      (defvar myconfig/frame-transparency '(100 . 100))
-      (defvar myconfig/default-font-size 100)
-      (defvar myconfig/default-variable-font-size 100)
-      (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-      (set-frame-parameter (selected-frame) 'alpha myconfig/frame-transparency)
-      (add-to-list 'default-frame-alist `(alpha . ,myconfig/frame-transparency))
+  (defun myconfig/set-font-face ()
+    "This is somewhat documentation."
+    (defvar myconfig/frame-transparency '(100 . 100))
+    (defvar myconfig/default-font-size 100)
+    (defvar myconfig/default-variable-font-size 100)
 
-      (set-face-attribute 'default nil :font "Jetbrains Mono" :height myconfig/default-font-size)
-      (set-face-attribute 'fixed-pitch nil :font "Jetbrains Mono" :height myconfig/default-font-size)
-      (set-face-attribute 'variable-pitch nil :font "FiraCode Nerd Font Mono" :height    myconfig/default-variable-font-size :weight 'regular))
+    (set-frame-parameter (selected-frame) 'alpha myconfig/frame-transparency)
+    (add-to-list 'default-frame-alist `(alpha . ,myconfig/frame-transparency))
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+
+    (set-face-attribute 'default nil :font "Jetbrains Mono" :height myconfig/default-font-size)
+    (set-face-attribute 'fixed-pitch nil :font "Jetbrains Mono" :height myconfig/default-font-size)
+    (set-face-attribute 'variable-pitch nil :font "FiraCode Nerd Font Mono" :height    myconfig/default-variable-font-size :weight 'regular))
 
 #+end_src
 
@@ -159,19 +159,16 @@ Make gc pauses faster by decreasing the threshold.
 *** Theme and All the Icons
 #+begin_src emacs-lisp
 (use-package doom-themes
-  :init (load-theme 'doom-palenight t))
+  :init (load-theme 'doom-one t))
 
 (use-package all-the-icons)
 
 #+end_src
-
 *** Doom Modeline
 #+begin_src emacs-lisp
-
-  (use-package doom-modeline
-    :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 18)))
-
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 18)))
 #+end_src
 
 ** Rainbow Delimiters
@@ -189,12 +186,11 @@ This package colorizes brackets like rainbow
     :config
     (dashboard-setup-startup-hook)
     (setq dashboard-banner-logo-title "Get your ass up and work.")
-    (setq dashboard-items '((projects . 5)
-                      (agenda . 5)))
+    (setq dashboard-items '((projects . 5) (recents . 5)))
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
     (setq dashboard-set-init-info nil)
-	  (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+    (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
     (setq dashboard-startup-banner "~/Downloads/rick300.png")
     (setq dashboard-set-navigator t))
 #+end_src
@@ -348,14 +344,16 @@ This package colorizes brackets like rainbow
     :commands (org-capture org-agenda)
     :hook (org-mode . myconfig/org-mode-setup)
     :config
+    (setq org-ellipsis " ▾")
+
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
 
     (setq org-agenda-files
-          '("~/orgs/tasks.org"
-            "~/orgs/habits.org"
-            "~/orgs/birthdays.org"))
+          '("~/codes/orgs/tasks.org"
+            "~/codes/orgs/habits.org"
+            "~/codes/orgs/birthdays.org"))
 
     (require 'org-habit)
     (add-to-list 'org-modules 'org-habit)
@@ -434,6 +432,7 @@ This package colorizes brackets like rainbow
                     ((org-agenda-overriding-header "Cancelled Projects")
                      (org-agenda-files org-agenda-files)))))))
 
+
     (define-key global-map (kbd "C-c j")
       (lambda () (interactive) (org-capture nil "jj")))
 
@@ -479,6 +478,23 @@ This package Makes Org mode files in mid section of the screen.
 
 #+end_src
 
+** Org Babel Tangle
+
+Automatically tangle our Org config file when we save it
+
+#+begin_src emacs-lisp
+
+  (defun myconfig/org-babel-tangle-config ()
+    (when (string-equal (file-name-directory (buffer-file-name))
+                        (expand-file-name user-emacs-directory))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'myconfig/org-babel-tangle-config)))
+
+#+end_src
+
 ** Org Templates
 
 #+begin_src emacs-lisp
@@ -495,7 +511,7 @@ This package Makes Org mode files in mid section of the screen.
 
 #+end_src
 
-* Eshell
+* Shell Modes
 ** Eshell configuration Function
 #+begin_src emacs-lisp
 (defun myconfig/configure-eshell ()
@@ -514,9 +530,8 @@ This package Makes Org mode files in mid section of the screen.
 ** Eshell Git Prompt
 
 #+begin_src emacs-lisp
-
-  (use-package eshell-git-prompt
-    :after eshell)
+(use-package eshell-git-prompt
+  :after eshell)
 
 #+end_src
 
@@ -534,6 +549,18 @@ This package Makes Org mode files in mid section of the screen.
   (eshell-git-prompt-use-theme 'powerline))
 #+end_src
 
+** Vterm
+#+begin_src emacs-lisp
+
+  (use-package vterm
+    :commands vterm
+    :config
+    (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")  ;; Set this to match your custom shell prompt
+    (setq vterm-shell "bash")                       ;; Set this to customize the shell to launch
+    (setq vterm-max-scrollback 10000))
+
+#+end_src
+
 * Dired
 ** Dired use-package
 
@@ -542,8 +569,7 @@ This package Makes Org mode files in mid section of the screen.
     :ensure nil
     :commands (dired dired-jump)
     :bind (("C-x C-j" . dired-jump))
-    :custom ((dired-listing-switches "-agho --group-directories-first"))
-    :config)
+    :custom ((dired-listing-switches "-agho --group-directories-first")))
 
 #+end_src
 
@@ -552,19 +578,15 @@ This package Makes Org mode files in mid section of the screen.
 This is a very important packages for me. Because I like to open only one dired buffer. This prevents dired from creating new buffer every time a folder is open or go back to parent folder.
 
 #+begin_src emacs-lisp
-
-  (use-package dired-single
-    :commands (dired dired-jump))
-
+(use-package dired-single
+  :commands (dired dired-jump))
 #+end_src
 
 ** Dired all the icons
 
 #+begin_src emacs-lisp
-
-  (use-package all-the-icons-dired
-    :hook (dired-mode . all-the-icons-dired-mode))
-
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
 ** Opening file with dired
@@ -582,10 +604,15 @@ This is a very important packages for me. Because I like to open only one dired 
 ** Hiding dotfiles
 
 #+begin_src emacs-lisp
-  (use-package dired-hide-dotfiles
-    :hook (dired-mode . dired-hide-dotfiles-mode)
-    :config
-    (define-key dired-mode-map "." #'dired-hide-dotfiles-mode))
+(use-package dired-hide-dotfiles
+  :hook (dired-mode . dired-hide-dotfiles-mode))
+#+end_src
+
+* Perspective
+#+begin_src emacs-lisp
+  (use-package perspective
+    :ensure t
+	  :init (persp-mode))
 #+end_src
 
 * Programming tools and Tweaks
@@ -637,7 +664,7 @@ This is a very important packages for me. Because I like to open only one dired 
     :config (projectile-mode)
     :init
     (when (file-directory-p "~/codes/")
-      (setq projectile-project-search-path '("~/codes/clojure/" "~/codes/c/" "~/codes/flutter/" "~/codes/rust/" "~/codes/web/" "~/codes/go/" "~/codes/haskell/" "~/codes/java/")))
+      (setq projectile-project-search-path '("~/codes/clojure/" "~/codes/c/" "~/codes/rust/" "~/codes/flutter/" "~/codes/rust/" "~/codes/go/" "~/codes/web/" "~/codes/go/" "~/codes/haskell/" "~/codes/java/" "~/codes/pyt")))
     (setq projectile-switch-project-action #'projectile-dired))
 
   (use-package counsel-projectile ;; This package binds counsel and projectile together
@@ -695,15 +722,12 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+end_src
 
-** Rustic Mode for Rust
+** Rust
 
 #+begin_src emacs-lisp
 
-  (use-package rustic
-    :ensure
-    :config
-    ;; comment to disable rustfmt on save
-    (setq rustic-format-on-save t))
+    (use-package rustic
+      :ensure t)
 
 #+end_src
 
@@ -724,15 +748,27 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+begin_src emacs-lisp
 
-  (use-package haskell-mode
-    :ensure t
-    :hook (haskell-mode . lsp-deferred)
-    :config
-    (setq lsp-headerline-breadcrumb-icons-enable nil))
+    (use-package haskell-mode
+      :ensure t
+      :hook (haskell-mode . lsp-deferred)
+      :config
+      (setq lsp-headerline-breadcrumb-icons-enable nil))
 
-  (use-package lsp-haskell ;; LSP does not suppor Haskell by Default
-    :ensure t)
+    (use-package lsp-haskell ;; LSP does not suppor Haskell by Default
+      :ensure t)
 
+    (use-package hindent
+      :hook (haskell-mode . hindent-mode))
+
+    ;; (add-hook 'haskell-mode-hook #'hindent-mode)
+
+#+end_src
+
+** Clojure Mode
+#+begin_src emacs-lisp
+  (use-package clojure-mode
+    :hook (clojure-mode . lsp-deferred))
+  (use-package cider)
 #+end_src
 
 ** Golang Mode
@@ -769,16 +805,18 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+begin_src emacs-lisp
 
+
   (use-package dart-mode
     ;; Optional
-    :hook (dart-mode . flutter-test-mode))
+    :hook (dart-mode . flutter-test-mode)
+    :config
+    (setq lsp-dart-flutter-sdk-dir "/home/imon/snap/flutter/common/flutter/")
+    (setq lsp-dart-sdk-dir "/home/imon/snap/flutter/common/flutter/bin/cache/dart-sdk/"))
 
   (use-package flutter
     :after dart-mode
     :bind (:map dart-mode-map
-                ("C-M-x" . #'flutter-run-or-hot-reload))
-    :custom
-    (flutter-sdk-path "/home/imon/snap/flutter/common/flutter/"))
+                ("C-M-x" . #'flutter-run-or-hot-reload)))
 
   ;; ;; Optional
   ;; (use-package flutter-l10n-flycheck
@@ -811,6 +849,8 @@ This is a very important packages for me. Because I like to open only one dired 
     :hook (java-mode . lsp-deferred))
 
   (use-package lsp-java
-    :ensure t)
+    :ensure t
+    :config
+    (setq lsp-java-format-on-type-enabled nil))
 
 #+end_src

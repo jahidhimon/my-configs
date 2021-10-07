@@ -246,9 +246,9 @@ globalkeys = my_table.join(
               {description = "go back", group = "tag"}),
 
     -- Non-empty tag browsing
-    awful.key({ altkey }, "Left", function () lain.util.tag_view_nonempty(-1) end,
+    awful.key({ modkey, "Shift" }, "Left", function () lain.util.tag_view_nonempty(-1) end,
               {description = "view  previous nonempty", group = "tag"}),
-    awful.key({ altkey }, "Right", function () lain.util.tag_view_nonempty(1) end,
+    awful.key({ modkey, "Shift" }, "Right", function () lain.util.tag_view_nonempty(1) end,
               {description = "view  previous nonempty", group = "tag"}),
 
     -- Default client focus
@@ -414,12 +414,12 @@ globalkeys = my_table.join(
     --           {description = "show calendar", group = "widgets"}),
     awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
               {description = "show filesystem", group = "widgets"}),
-    
+
     -- Brightness
     awful.key({ modkey, altkey }, "Up", function () os.execute("xbacklight -inc 10") end,
-              {description = "+10%", group = "hotkeys"}),
+              {description = "brightness +10%", group = "hotkeys"}),
     awful.key({ modkey, altkey }, "Down", function () os.execute("xbacklight -dec 10") end,
-              {description = "-10%", group = "hotkeys"}),
+              {description = "brightness -10%", group = "hotkeys"}),
 
     -- ALSA volume control
     awful.key({ }, "XF86AudioRaiseVolume",
@@ -490,7 +490,7 @@ globalkeys = my_table.join(
     -- User programs
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
               {description = "run browser", group = "launcher"}),
-    awful.key({ modkey }, "e", function () awful.spawn("nautilus") end,
+    awful.key({ modkey }, "e", function () awful.spawn("thunar") end,
               {description = "launch file_manager", group = "launcher"}),
     awful.key({ }, "XF86Calculator", function () awful.spawn("speedcrunch") end,
               {description = "lauch speedCruch calculator", group = "launcher"}),
@@ -713,60 +713,11 @@ client.connect_signal("manage", function (c)
     end
 end)
 
--- Add a titlebar if titlebars_enabled is set to true in the rules.
-client.connect_signal("request::titlebars", function(c)
-    -- Custom
-    if beautiful.titlebar_fun then
-        beautiful.titlebar_fun(c)
-        return
-    end
-
-    -- Default
-    -- buttons for the titlebar
-    local buttons = my_table.join(
-        awful.button({ }, 1, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.move(c)
-        end),
-        awful.button({ }, 2, function() c:kill() end),
-        awful.button({ }, 3, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.resize(c)
-        end)
-    )
-
-    awful.titlebar(c, {size = dpi(16)}) : setup {
-        { -- Left
-            awful.titlebar.widget.iconwidget(c),
-            buttons = buttons,
-            layout  = wibox.layout.fixed.horizontal
-        },
-        { -- Middle
-            { -- Title
-                align  = "center",
-                widget = awful.titlebar.widget.titlewidget(c)
-            },
-            buttons = buttons,
-            layout  = wibox.layout.flex.horizontal
-        },
-        { -- Right
-            awful.titlebar.widget.floatingbutton (c),
-            awful.titlebar.widget.maximizedbutton(c),
-            awful.titlebar.widget.stickybutton   (c),
-            awful.titlebar.widget.ontopbutton    (c),
-            awful.titlebar.widget.closebutton    (c),
-            layout = wibox.layout.fixed.horizontal()
-        },
-        layout = wibox.layout.align.horizontal
-    }
-end)
-
-
 
 -- Enable sloppy focus, so that focus follows mouse.
--- client.connect_signal("mouse::enter", function(c)
---     c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
--- end)
+client.connect_signal("mouse::enter", function(c)
+    c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
+end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
@@ -778,11 +729,12 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Session startup
 -- awful.spawn.with_shell("xrandr --output eDP1 --primary --mode 1366x768 --output DP1 --mode 1366x768 --right-of eDP1")
 awful.spawn.with_shell("xcompmgr")
+awful.spawn.with_shell("thunar --daemon")
 awful.spawn.with_shell("birdtray")
-awful.spawn.with_shell("/usr/libexec/polkit-gnome-authentication-agent-1")
+awful.spawn.with_shell("/usr/libexec/xfce-polkit")
 -- awful.spawn.with_shell("fehbg &")
 awful.spawn.with_shell("nitrogen --restore")
-awful.spawn.with_shell("emacs --daemon")
+-- awful.spawn.with_shell("emacs --daemon")
 
 
 beautiful.useless_gap = 5
