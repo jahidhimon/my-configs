@@ -1,0 +1,21 @@
+{
+  "languageserver": {
+    "haskell": {
+      "command": "haskell-language-server-wrapper",
+      "args": ["--lsp"],
+      "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
+      "filetypes": ["haskell", "lhaskell"]
+    },
+    "erlang": {
+      "command": "erlang_ls",
+      "filetypes": ["erlang"]
+    },
+    "ocaml": {
+      "command": "ocaml-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["ocaml", "reason"]
+    }
+  },
+  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/12.0.1/clangd_12.0.1/bin/clangd",
+  "python.linting.flake8Enabled": true
+}

@@ -1,0 +1,41 @@
+#/bin/sh
+# Extremely simple script for copying certain files
+
+cp ~/.tmux.conf ./tmux
+echo ".tmux.conf copied successfully in ./Tmux"
+echo ""
+
+cp ~/.tmux/left_status.sh ./tmux
+echo ".tmux/left_status copied successfully in ./Tmux"
+echo ""
+
+cp ~/.tmux/right_status.sh ./tmux
+echo ".tmux/right_status copied successfully in ./Tmux"
+echo ""
+
+cp ~/.vimrc ./vim
+echo ".vimrc copied successfully in ./vim"
+echo ""
+
+cp * ~/.config/nvim/* ./nvim/
+echo ".vimrc copied successfully in ./vim"
+echo ""
+
+cp -r ~/.config/awesome/* ./awesomeWM
+echo "rc.lua copied successfully in ./awesomeWM"
+echo ""
+
+cp ~/.bashrc ./bash
+echo ".bashrc copied successfully in ./Bash"
+echo ""
+
+cp ~/.config/kitty/kitty.conf ./kitty
+echo "kitty conf copied successfully in ./Kitty"
+echo ""
+
+# cp ~/.config/alacritty/alacritty.yml ./alacritty
+# echo "alacritty.yml copied successfully in ./alacritty"
+# echo ""
+
+cp ~/.config/zathura/zathurarc ./zathura
+echo "zathurarc copied successfully in ./zathurarc"
