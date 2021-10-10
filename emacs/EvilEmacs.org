@@ -135,8 +135,8 @@ Make gc pauses faster by decreasing the threshold.
     (add-to-list 'default-frame-alist `(alpha . ,myconfig/frame-transparency))
     (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
-    (set-face-attribute 'default nil :font "Jetbrains Mono" :height myconfig/default-font-size)
-    (set-face-attribute 'fixed-pitch nil :font "Jetbrains Mono" :height myconfig/default-font-size)
+    (set-face-attribute 'default nil :font "FiraCode Nerd Font Mono" :height myconfig/default-font-size)
+    (set-face-attribute 'fixed-pitch nil :font "FiraCode Nerd Font Mono" :height myconfig/default-font-size)
     (set-face-attribute 'variable-pitch nil :font "FiraCode Nerd Font Mono" :height    myconfig/default-variable-font-size :weight 'regular))
 
 #+end_src
