@@ -43,70 +43,27 @@ function battery_meter() {
   printf "] "
 }
 
-function load_average() {
-
-  printf "%s " "$(uptime | awk -F: '{printf $NF}' | tr -d ',')"
-
-}
-
 function date_time() {
 
-  printf "%s" "$(date +'[%d %b %a] [%r]')"
+  # printf "%s" "$(date +'[%d %b %a] [%r]')"
+  printf "%s" "$(date +'[%r]')"
 
 }
 
-function internet_status(){
-    # Loop through the interfaces and check for the interface that is up.
-  for file in /sys/class/net/*; do
-
-    # iface=$(basename $file);
-
-    read status < $file/operstate;
-    local connection=0
-
-    if [ "$status" == "up" ] ; then
-      let connection=1
-      # ip addr show $iface | awk '/inet /{printf $2"] "}'
-fi
-
-  done
-
-  if [ $connection -eq 1] ; then
-    printf " [online]"
-  else
-    printf " [offline]"
-  fi
-
-}
 
 function memory_usage() {
   local fgdefault='#[fg=colour40]'
   if [ "$(which bc)" ]; then
-    # Display used, total, and percentage of memory using the free command.
     read total used <<< $(free -m | awk '/Mem/{printf $2" "$3}')
-    # Calculate the percentage of memory used with bc.
     percent=$(bc -l <<< "100 * $used / $total")
-    # if [$percent -lt 10]; then
-    #   fgcolorofram='#[fg=colour144]'
-    #   printf "[${fgcolorofram}${used}M${fgdefault}/${total}M] "
-    # elif [$percent -lt 50]; then
-    #   fgcolorofram='#[fg=colour35]'
-    #   printf "[${fgcolorofram}${used}M${fgdefault}/${total}M] "
-    # fi
-    # Feed the variables into awk and print the values with formating.
-    # awk -v u=$used -v t=$total -v p=$percent 'BEGIN {printf "[%sMi/%sMi %.1f%] ", t, u, p}'
-    # awk -v u=$used -v t=$total -v p=$percent 'BEGIN {printf "[${fg-color}%sM${fgdefault}/%sM] ", t, u}'
     printf "[${fgdefault}${used}M${fgdefault}/${total}M] "
   fi
 }
 
 function main() {
-
   battery_meter
-  # load_average
   memory_usage
   date_time
-  # internet_status
 }
 
 # Calling the main function which will call the other functions.

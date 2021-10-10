@@ -15,7 +15,11 @@ return require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
-  use 'kyazdani42/nvim-tree.lua'
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = 'kyazdani42/nvim-web-devicons',
+    config = function() require'nvim-tree'.setup {} end
+  }
 
   use 'navarasu/onedark.nvim'
 
@@ -24,8 +28,6 @@ return require('packer').startup(function()
     requires = {'vim-airline/vim-airline-themes', opt = true}
   }
   
-  use 'kyazdani42/nvim-web-devicons'
-
   use {'neoclide/coc.nvim', branch = 'release'}
 
   use 'junegunn/fzf'

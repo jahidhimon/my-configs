@@ -23,6 +23,10 @@ require'nvim-treesitter.configs'.setup {
     "html",
     "dart",
     "scss",
+    "erlang",
+    "elixir",
+    "ocaml",
+    "rust",
   },
 }
 

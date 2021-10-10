@@ -79,7 +79,7 @@ local editor       = os.getenv("EDITOR") or "runemacs"
 local gui_editor   = os.getenv("GUI_EDITOR") or "runemacs"
 local browser      = os.getenv("BROWSER") or "qutebrowser"
 -- local scrlocker    = "slock"
-local scrlocker    = "slock"
+local scrlocker    = "i3lock -c 000000"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "1", "2", "3", "4", "5" }
@@ -484,7 +484,7 @@ globalkeys = my_table.join(
     -- awful.key({ modkey }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,
     --           {description = "copy terminal to gtk", group = "hotkeys"}),
     -- Copy clipboard to primary (gtk to terminals)
-    awful.key({ modkey }, "v", function () awful.spawn.with_shell("xsel -b | xsel") end,
+    awful.key({ modkey }, "v", function () awful.spawn.with_shell("sudo yast2 --qt") end,
               {description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- User programs
@@ -731,7 +731,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 awful.spawn.with_shell("xcompmgr")
 awful.spawn.with_shell("thunar --daemon")
 awful.spawn.with_shell("birdtray")
-awful.spawn.with_shell("/usr/libexec/xfce-polkit")
+awful.spawn.with_shell("/usr/libexec/polkit-gnome-authentication-agent-1")
 -- awful.spawn.with_shell("fehbg &")
 awful.spawn.with_shell("nitrogen --restore")
 -- awful.spawn.with_shell("emacs --daemon")
