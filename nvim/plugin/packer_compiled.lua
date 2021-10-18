@@ -138,6 +138,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/imon/.local/share/nvim/site/pack/packer/start/vim-less"
   },
+  ["vim-sandwich"] = {
+    loaded = true,
+    path = "/home/imon/.local/share/nvim/site/pack/packer/start/vim-sandwich"
+  },
   ["vim-slime"] = {
     loaded = true,
     path = "/home/imon/.local/share/nvim/site/pack/packer/start/vim-slime"

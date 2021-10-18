@@ -67,7 +67,7 @@ local keymap = {
   },
   c = { -- Coc
     name = '+Coc',
-    d = {':<C-u>CocList diagnostics<CR>', 'diagnostics'},
+    d = 'diagnostics',
     e = {':<C-u>CocList extensions<CR>', 'extensions'},
     c = {':<C-u>CocList commands<CR>', 'commands'},
     o = {':<C-u>CocList outline<CR>', 'outlines'},

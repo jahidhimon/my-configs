@@ -45,8 +45,7 @@ function battery_meter() {
 
 function date_time() {
 
-  # printf "%s" "$(date +'[%d %b %a] [%r]')"
-  printf "%s" "$(date +'[%r]')"
+  printf "%s" "$(date +'[%d %b %a] [%r]')"
 
 }
 

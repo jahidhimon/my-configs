@@ -21,3 +21,12 @@ source ~/.profile
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 export FZF_DEFAULT_COMMAND='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*,build/*,.dart_tool/*,ios/*,android/*,target/*}"'
+export CHROME_EXECUTABLE=/usr/bin/chromium
+
+function fcopy() {
+  xclip -sel c < $1
+}
+
+function fpaste() {
+  xclip -o > $1
+}
