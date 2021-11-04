@@ -133,7 +133,6 @@ Make gc pauses faster by decreasing the threshold.
 
     (set-frame-parameter (selected-frame) 'alpha myconfig/frame-transparency)
     (add-to-list 'default-frame-alist `(alpha . ,myconfig/frame-transparency))
-    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
     (set-face-attribute 'default nil :font "FiraCode Nerd Font Mono" :height myconfig/default-font-size)
     (set-face-attribute 'fixed-pitch nil :font "FiraCode Nerd Font Mono" :height myconfig/default-font-size)
@@ -181,18 +180,18 @@ This package colorizes brackets like rainbow
 
 ** Dashboard
 #+begin_src emacs-lisp
-  (use-package dashboard
-    :ensure t
-    :config
-    (dashboard-setup-startup-hook)
-    (setq dashboard-banner-logo-title "Get your ass up and work.")
-    (setq dashboard-items '((projects . 5) (recents . 5)))
-    (setq dashboard-set-heading-icons t)
-    (setq dashboard-set-file-icons t)
-    (setq dashboard-set-init-info nil)
-    (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
-    (setq dashboard-startup-banner "~/Downloads/rick300.png")
-    (setq dashboard-set-navigator t))
+  ;; (use-package dashboard
+  ;;   :ensure t
+  ;;   :config
+  ;;   (dashboard-setup-startup-hook)
+  ;;   (setq dashboard-banner-logo-title "Get your ass up and work.")
+  ;;   (setq dashboard-items '((projects . 5) (recents . 5)))
+  ;;   (setq dashboard-set-heading-icons t)
+  ;;   (setq dashboard-set-file-icons t
+  ;;   (setq dashboard-set-init-info nil)
+  ;;   (setq dashboard-projects-switch-function 'counsel-projectile-switch-project-by-name)
+  ;;   (setq dashboard-startup-banner "~/Downloads/rick300.png")
+  ;;   (setq dashboard-set-navigator t))
 #+end_src
 
 * Keyboard Setup
