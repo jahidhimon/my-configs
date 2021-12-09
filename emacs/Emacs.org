@@ -6,7 +6,7 @@
 #+begin_src emacs-lisp
 
   (require 'package)
- 
+
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
   ("org" . "https://orgmode.org/elpa/")
   ("elpa" . "https://elpa.gnu.org/packages/")))
@@ -33,15 +33,16 @@
   (setq use-package-always-ensure t)
 
   (use-package auto-package-update
-    :custom
-    (auto-package-update-interval 7)
-    (auto-package-update-prompt-before-update t)
-    (auto-package-update-hide-results t)
-    :config
-    (auto-package-update-maybe)
-    (auto-package-update-at-time "09:00"))
+	:custom
+	(auto-package-update-interval 7)
+	(auto-package-update-prompt-before-update t)
+	(auto-package-update-hide-results t)
+	:config
+	(auto-package-update-maybe)
+	(auto-package-update-at-time "09:00"))
 
-    #+end_src
+(global-auto-revert-mode t)
+#+end_src
 
 ** System Clean
 *** Move Backup Files to tmp/backups
@@ -132,16 +133,16 @@ Make gc pauses faster by decreasing the threshold.
 
   (defun myconfig/set-font-face ()
     "This is somewhat documentation."
-    (defvar myconfig/frame-transparency '(100 . 100))
-    (defvar myconfig/default-font-size 100)
-    (defvar myconfig/default-variable-font-size 100)
+    (defvar myconfig/frame-transparency '(97 . 97))
+    (defvar myconfig/default-font-size 105)
+    (defvar myconfig/default-variable-font-size 105)
 
     (set-frame-parameter (selected-frame) 'alpha myconfig/frame-transparency)
     (add-to-list 'default-frame-alist `(alpha . ,myconfig/frame-transparency))
 
     (set-face-attribute 'default nil :font "Jetbrains Mono" :height myconfig/default-font-size)
     (set-face-attribute 'fixed-pitch nil :font "Jetbrains Mono" :height myconfig/default-font-size)
-    (set-face-attribute 'variable-pitch nil :font "FiraCode Nerd Font Mono" :height    myconfig/default-variable-font-size :weight 'regular))
+    (set-face-attribute 'variable-pitch nil :font "Jetbrains Mono" :height    myconfig/default-variable-font-size :weight 'regular))
 
 #+end_src
 
@@ -297,7 +298,7 @@ This package colorizes brackets like rainbow
                     (org-level-6 . 0.90)
                     (org-level-7 . 0.8)
                     (org-level-8 . 1.0)))
-      (set-face-attribute (car face) nil :font "FiraCode Nerd Font Mono" :weight 'regular :height (cdr face)))
+      (set-face-attribute (car face) nil :font "Jetbrains Mono" :weight 'regular :height (cdr face)))
 
     ;; Ensure that anything that should be fixed-pitch in Org files appears that way
     (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
@@ -327,161 +328,15 @@ This package colorizes brackets like rainbow
 ** Org Mode
 #+begin_src emacs-lisp
 
-  (use-package org
-    :pin org
-    :commands (org-capture org-agenda)
-    :hook (org-mode . myconfig/org-mode-setup)
-    :config
-    (setq org-ellipsis " ▾")
-
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-
-    (setq org-agenda-files
-          '("~/codes/orgs/tasks.org"
-            "~/codes/orgs/habits.org"
-            "~/codes/orgs/birthdays.org"))
-
-    (require 'org-habit)
-    (add-to-list 'org-modules 'org-habit)
-    (setq org-habit-graph-column 60)
-
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
-
-    (setq org-refile-targets
-          '(("Archive.org" :maxlevel . 1)
-            ("Tasks.org" :maxlevel . 1)))
-
-    ;; Save Org buffers after refiling!
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
-
-    (setq org-tag-alist
-          '((:startgroup)
-                                          ; Put mutually exclusive tags here
-            (:endgroup)
-            ("@errand" . ?E)
-            ("@home" . ?H)
-            ("@work" . ?W)
-            ("agenda" . ?a)
-            ("planning" . ?p)
-            ("publish" . ?P)
-            ("batch" . ?b)
-            ("note" . ?n)
-            ("idea" . ?i)))
-
-    ;; Configure custom agenda views
-    (setq org-agenda-custom-commands
-          '(("d" "Dashboard"
-             ((agenda "" ((org-deadline-warning-days 7)))
-              (todo "NEXT"
-                    ((org-agenda-overriding-header "Next Tasks")))
-              (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
-
-            ("n" "Next Tasks"
-             ((todo "NEXT"
-                    ((org-agenda-overriding-header "Next Tasks")))))
-
-            ("W" "Work Tasks" tags-todo "+work-email")
-
-            ;; Low-effort next actions
-            ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-             ((org-agenda-overriding-header "Low Effort Tasks")
-              (org-agenda-max-todos 20)
-              (org-agenda-files org-agenda-files)))
-
-            ("w" "Workflow Status"
-             ((todo "WAIT"
-                    ((org-agenda-overriding-header "Waiting on External")
-                     (org-agenda-files org-agenda-files)))
-              (todo "REVIEW"
-                    ((org-agenda-overriding-header "In Review")
-                     (org-agenda-files org-agenda-files)))
-              (todo "PLAN"
-                    ((org-agenda-overriding-header "In Planning")
-                     (org-agenda-todo-list-sublevels nil)
-                     (org-agenda-files org-agenda-files)))
-              (todo "BACKLOG"
-                    ((org-agenda-overriding-header "Project Backlog")
-                     (org-agenda-todo-list-sublevels nil)
-                     (org-agenda-files org-agenda-files)))
-              (todo "READY"
-                    ((org-agenda-overriding-header "Ready for Work")
-                     (org-agenda-files org-agenda-files)))
-              (todo "ACTIVE"
-                    ((org-agenda-overriding-header "Active Projects")
-                     (org-agenda-files org-agenda-files)))
-              (todo "COMPLETED"
-                    ((org-agenda-overriding-header "Completed Projects")
-                     (org-agenda-files org-agenda-files)))
-              (todo "CANC"
-                    ((org-agenda-overriding-header "Cancelled Projects")
-                     (org-agenda-files org-agenda-files)))))))
-
-
-    (define-key global-map (kbd "C-c j")
-      (lambda () (interactive) (org-capture nil "jj")))
-
-    (myconfig/org-font-setup))
-
-#+end_src
-
-** Org Bullets
-
-This package changes Org Header Pointers as I customize
-
-#+begin_src emacs-lisp
-(use-package org-bullets
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-#+end_src
-
-** Fill visual column
-
-This package Makes Org mode files in mid section of the screen.
-
-#+begin_src emacs-lisp
-(defun myconfig/org-mode-visual-fill ()
-  (setq visual-fill-column-width 120 ;; 120 characters width of the column.
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-(use-package visual-fill-column
-  :hook (org-mode . myconfig/org-mode-visual-fill))
-#+end_src
-
-** Org Babel
-
-#+begin_src emacs-lisp
-
-  (with-eval-after-load 'org
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (python . t)))
-    (push '("conf-unix" . conf-unix) org-src-lang-modes))
-
-#+end_src
-
-** Org Babel Tangle
-
-Automatically tangle our Org config file when we save it
-
-#+begin_src emacs-lisp
-
-  (defun myconfig/org-babel-tangle-config ()
-    (when (string-equal (file-name-directory (buffer-file-name))
-                        (expand-file-name user-emacs-directory))
-      ;; Dynamic scoping to the rescue
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
-
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'myconfig/org-babel-tangle-config)))
-
-#+end_src
+    (use-package org
+      :pin org
+      :commands (org-capture org-agenda)
+      :hook (org-mode . myconfig/org-mode-setup)
+      :config
+      (setq org-ellipsis " ▾")
+      (setq org-clock-sound "~/my-configs/emacs/pomodoroding.wav")
+      (myconfig/org-font-setup))
+#+end_src 
 
 ** Org Templates
 
@@ -566,8 +421,21 @@ Automatically tangle our Org config file when we save it
 This is a very important packages for me. Because I like to open only one dired buffer. This prevents dired from creating new buffer every time a folder is open or go back to parent folder.
 
 #+begin_src emacs-lisp
-(use-package dired-single
-  :commands (dired dired-jump))
+	(use-package dired-single
+	:ensure t)
+
+	(defun my-dired-init ()
+		(define-key dired-mode-map [remap dired-find-file]
+			'dired-single-buffer)
+		(define-key dired-mode-map [remap dired-mouse-find-file-other-window]
+			'dired-single-buffer-mouse)
+		(define-key dired-mode-map [remap dired-up-directory]
+			'dired-single-up-directory))
+
+		(if (boundp 'dired-mode-map)
+				(my-dired-init)
+			(add-hook 'dired-load-hook 'my-dired-init))
+
 #+end_src
 
 ** Dired all the icons
@@ -594,13 +462,6 @@ This is a very important packages for me. Because I like to open only one dired 
 #+begin_src emacs-lisp
 (use-package dired-hide-dotfiles
   :hook (dired-mode . dired-hide-dotfiles-mode))
-#+end_src
-
-* Perspective
-#+begin_src emacs-lisp
-  (use-package perspective
-    :ensure t
-	  :init (persp-mode))
 #+end_src
 
 * Programming tools and Tweaks
@@ -645,95 +506,135 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+end_src
 
-** Projectile
+** Paredit
 #+begin_src emacs-lisp
-  (use-package projectile
-    :diminish projectile-mode
-    :config (projectile-mode)
-    :init
-    (when (file-directory-p "~/codes/")
-      (setq projectile-project-search-path '("~/codes/clojure/" "~/codes/c/" "~/codes/rust/" "~/codes/flutter/" "~/codes/rust/" "~/codes/go/" "~/codes/web/" "~/codes/go/" "~/codes/haskell/" "~/codes/java/" "~/codes/pyt")))
-    (setq projectile-switch-project-action #'projectile-dired))
+	(use-package paredit
+		:ensure t
+		:config
+			(defun myconfig/mode-space-delimiter-p (endp delimiter)
+				"Don't insert a space before delimiters in certain modes
+			  https://github.com/chadhs/dotfiles/blob/master/editors/emacs-config.org#paredit"
+pp				(or
+				 (bound-and-true-p js2-mode)
+				 (bound-and-true-p js-mode)
+				 (bound-and-true-p javascript-mode)))
+			(add-to-list 'paredit-space-for-delimiter-predicates #'my-config/mode-space-delimiter-p))
 
-  (use-package counsel-projectile ;; This package binds counsel and projectile together
-    :config (counsel-projectile-mode))
+	(add-hook 'clojure-mode-hook          'enable-paredit-mode)
+	(add-hook 'cider-repl-mode-hook       'enable-paredit-mode)
+	(add-hook 'cider-mode-hook            'enable-paredit-mode)
+	(add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
+	(add-hook 'lisp-mode-hook             'enable-paredit-mode)
+	(add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+	(add-hook 'scheme-mode-hook           'enable-paredit-mode)
 
 #+end_src
 
-** SmartParens
+** Projectile
 #+begin_src emacs-lisp
+	(use-package projectile
+		:diminish projectile-mode
+		:config (projectile-mode)
+		:bind-keymap
+		("C-c p" . projectile-command-map)
+		:init
+	  (setq projectile-indexing-method 'native)
+		(setq projectile-project-search-path '("~/codes/c/" "~/codes/cpp" "~/codes/clojure" "~/codes/erlang" "~/codes/elixir" "~/codes/haskell" "~/codes/java" "~/codes/rust" "~/codes/web"))
+		(setq projectile-switch-project-action #'projectile-find-file))
 
-  (use-package smartparens
-    :ensure t
-    :hook (prog-mode . smartparens-mode))
-  (put 'upcase-region 'disabled nil)
+	(use-package counsel-projectile ;; This package binds counsel and projectile together
+		:config (counsel-projectile-mode))
 
 #+end_src
 
 ** LSP Mode
 #+begin_src emacs-lisp
 
-(use-package lsp-mode
-	:commands (lsp lsp-deferred)
-	:init
-	(setq lsp-keymap-prefix "C-c l")
-	:config
-	(lsp-enable-which-key-integration t))
+		(defun efs/lsp-mode-setup ()
+				(setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+				(lsp-headerline-breadcrumb-mode))
 
-(use-package lsp-ui
-	:hook (lsp-mode . lsp-ui-mode))
+		(use-package lsp-mode
+			:commands (lsp lsp-deferred)
+			:hook (lsp-mode . efs/lsp-mode-setup)
+			:init
+			(setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+			:config
+			(lsp-enable-which-key-integration t))
 
-(use-package lsp-ivy)
+
+		(use-package lsp-ui
+			:hook (lsp-mode . lsp-ui-mode)
+			:custom
+			(lsp-ui-doc-position 'bottom))
+
+	  (use-package lsp-ivy
+		  :after lsp)
+
+
 #+end_src
 
-** Treemacs
+** code folding
+    #+BEGIN_SRC emacs-lisp
+			(use-package hideshow
+			 :ensure t
+			 :hook (prog-mode . hs-minor-mode)
+			 :init
+			 (setq hs-hide-comments nil)
+			 :config (global-set-key (kbd "C-+") 'hs-toggle-hiding))
+    #+END_SRC
 
-#+begin_src emacs-lisp
-
-  (use-package treemacs
-    :after lsp)
-
-#+end_src
+** indentation highlighting
+    #+BEGIN_SRC emacs-lisp
+      (use-package highlight-indent-guides
+        :defer t
+        :hook ((prog-mode . highlight-indent-guides-mode))
+        :diminish highlight-indent-guides-mode
+        :config
+        (setq highlight-indent-guides-method 'character
+              highlight-indent-guides-responsive 'top))
+    #+END_SRC
 
 * Language Modes
 
-** RJSX Mode for React Javascript
-
+** CC Mode
 #+begin_src emacs-lisp
 
-  (use-package rjsx-mode
-    :mode "\\.js[x]?\\'"
-    :hook (rjsx-mode . lsp-deferred)
-    :config
-    (setq js-indent-level 2)
-    (setq lsp-headerline-breadcrumb-icons-enable nil))
+  (add-hook 'c-mode-hook 'lsp)
+  (add-hook 'c++-mode-hook 'lsp)
 
 #+end_src
 
-** Rust
-
+** Clojure Mode
 #+begin_src emacs-lisp
-
-    (use-package rustic
-      :ensure t)
-
+		(use-package clojure-mode)
+		(use-package cider
+			:ensure t)
+		(use-package flycheck-clj-kondo
+			:ensure t)
 #+end_src
 
-** TypeScript Mode
+** JS2 Mode
 
 #+begin_src emacs-lisp
+	(use-package js2-mode
+	  :mode "\\.js[x]?\\'"
+	  :init (electric-pair-mode 1)
+	  :hook (js2-mode . lsp-deferred)
+	  :config
+	  (setq js-indent-level 2))
+#+end_src
 
-  (use-package typescript-mode
+** Typescript Mode
+
+#+begin_src emacs-lisp
+   (use-package typescript-mode
     :mode "\\.ts[x]?\\'"
-    :hook (typescript-mode . lsp-deferred)
     :config
-    (setq typescript-indent-level 2)
-    (setq lsp-headerline-breadcrumb-icons-enable nil))
-
+    (setq typescript-indent-level 2))
 #+end_src
 
 ** Haskell Mode
-
 #+begin_src emacs-lisp
 
     (use-package haskell-mode
@@ -752,70 +653,15 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+end_src
 
-** Clojure Mode
+** Prolog Mode
 #+begin_src emacs-lisp
-  (use-package clojure-mode
-    :hook (clojure-mode . lsp-deferred))
-  (use-package cider)
-#+end_src
-
-** Golang Mode
-
-#+begin_src emacs-lisp
-
-  (use-package go-mode
-    :hook (go-mode . lsp-deferred)
-    :config
-    (setq lsp-headerline-breadcrumb-icons-enable t))
-
-#+end_src
-
-** CC Mode
-
-#+begin_src emacs-lisp
-
-  (add-hook 'c-mode-hook 'lsp)
-  (add-hook 'c++-mode-hook 'lsp)
-
-#+end_src
-
-** Lua Mode
-
-#+begin_src emacs-lisp
-
-  (use-package lua-mode
-    :hook (lua-mode . lsp-deferred)
-    :ensure t)
-
-#+end_src
-
-** Dart + Flutter
-
-#+begin_src emacs-lisp
-
-
-  (use-package dart-mode
-    ;; Optional
-    :hook (dart-mode . flutter-test-mode)
-    :config
-    (setq lsp-dart-flutter-sdk-dir "/home/imon/snap/flutter/common/flutter/")
-    (setq lsp-dart-sdk-dir "/home/imon/snap/flutter/common/flutter/bin/cache/dart-sdk/"))
-
-  (use-package flutter
-    :after dart-mode
-    :bind (:map dart-mode-map
-                ("C-M-x" . #'flutter-run-or-hot-reload)))
-
-  ;; ;; Optional
-  ;; (use-package flutter-l10n-flycheck
-  ;;   :after flutter
-  ;;   :config
-  ;;   (flutter-l10n-flycheck-setup))
-
-  (use-package lsp-dart
-    :ensure t
-    :hook (dart-mode . lsp))
-
+		(autoload 'run-prolog "prolog" "Start a Prolog sub-process." t)
+		(autoload 'prolog-mode "prolog" "Major mode for editing Prolog programs." t)
+		(autoload 'mercury-mode "prolog" "Major mode for editing Mercury programs." t)
+		(setq prolog-system 'swi)
+		(setq auto-mode-alist (append '(("\\.pl$" . prolog-mode)
+																		("\\.m$" . mercury-mode))
+																	 auto-mode-alist))
 #+end_src
 
 ** Python
@@ -842,3 +688,10 @@ This is a very important packages for me. Because I like to open only one dired 
     (setq lsp-java-format-on-type-enabled nil))
 
 #+end_src
+
+** JSON
+#+begin_src emacs-lisp
+  (use-package json-mode
+    :hook (json-mode . lsp-deferred))
+#+end_src
+
