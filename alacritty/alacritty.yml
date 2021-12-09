@@ -8,7 +8,7 @@ window:
     x: 5
     y: 5
   decorations: full
-scrolling:
+scrolling:  
   history: 10000
   multiplier: 100
   faux_multiplier: 100
