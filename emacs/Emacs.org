@@ -147,6 +147,13 @@ Make gc pauses faster by decreasing the threshold.
   (use-package darktooth-theme
     :ensure t)
 
+  (use-package modus-themes
+    :config
+    (setq modus-theme-italic-constructs t)
+    (setq modus-theme-bold-constructs nil)
+    (setq modus-theme-region '(bg-only no-extend))
+    (setq modus-themes-mode-line '(borderless 10 21.0)))
+
   (use-package doom-themes
     :ensure t)
 
@@ -530,7 +537,7 @@ This package colorizes brackets like rainbow
     (setq eshell-destroy-buffer-when-process-dies t)
     (setq eshell-visual-commands '("htop" "zsh" "vim")))
 
-  (eshell-git-prompt-use-theme 'multiline2))
+  (eshell-git-prompt-use-theme 'powerline)) 
 #+end_src
 
 * Dired
@@ -631,16 +638,18 @@ This is a very important packages for me. Because I like to open only one dired 
 
 ** Ace Jump
 #+begin_src emacs-lisp
-    (use-package ace-jump-mode
-      :ensure t
-      :bind ("C-;" . ace-jump-mode))
+  (use-package ace-jump-mode
+    :ensure t
+    :bind ("C-;" . ace-jump-char-mode))
 #+end_src
  
 ** Ace Window
 #+begin_src emacs-lisp
   (use-package ace-window
     :ensure t
-    :bind ("M-o" . ace-window)
+    :bind
+    ("M-o" . ace-window)
+    ("M-C-o" . ace-swap-window)
     :config
     (ace-window-display-mode nil)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
@@ -757,20 +766,20 @@ This is a very important packages for me. Because I like to open only one dired 
 
 ** Projectile
 #+begin_src emacs-lisp
-   (use-package projectile
-     :diminish projectile-mode
-     :config (projectile-mode)
-     :bind-keymap
-     ("C-c p" . projectile-command-map)
-     :init
-     (setq projectile-indexing-method 'native)
-     (setq projectile-project-search-path
-           '("~/codes/c/" "~/codes/cpp" "~/codes/clojure" "~/codes/elixir" "~/codes/go" "~/codes/haskell" "~/codes/nodejs/" "~/codes/py/"
-             "~/codes/web" "~/codes/shell/"))
-     (setq projectile-switch-project-action #'projectile-find-file))
+     (use-package projectile
+       :diminish projectile-mode
+       :config (projectile-mode)
+       :bind-keymap
+       ("C-c p" . projectile-command-map)
+       :init
+       (setq projectile-indexing-method 'native)
+       (setq projectile-project-search-path
+             '("~/codes/c/" "~/codes/cpp" "~/codes/cl" "~/codes/clojure" "~/codes/elixir" "~/codes/go"
+               "~/codes/haskell" "~/codes/nodejs/" "~/codes/py/" "~/codes/web" "~/codes/shell/"))
+       (setq projectile-switch-project-action #'projectile-find-file))
 
-   (use-package counsel-projectile ;; This package binds counsel and projectile together
-     :config (counsel-projectile-mode))
+     (use-package counsel-projectile ;; This package binds counsel and projectile together
+       :config (counsel-projectile-mode))
 
 #+end_src
 
@@ -891,6 +900,15 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+end_src
 
+** Common Lisp
+#+begin_src emacs-lisp
+  (use-package slime
+    :init
+    (setq inferior-lisp-program "/usr/bin/sbcl")
+    (add-to-list 'load-path "~/.slime")
+    :ensure t)
+#+end_src
+ 
 ** Clojure Mode
 #+begin_src emacs-lisp
 		(use-package clojure-mode)
@@ -935,14 +953,26 @@ This is a very important packages for me. Because I like to open only one dired 
 ** JS2 Mode
 
 #+begin_src emacs-lisp
-  (use-package js2-mode
-    :mode "\\.js\\'"
-    :init (electric-pair-mode 1)
-    :hook (js2-mode . lsp-deferred)
-    :config
-    (setq js-indent-level 2))
+    (use-package js2-mode
+      :mode "\\.js\\'"
+      :init (electric-pair-mode 1)
+      :hook (js2-mode . lsp-deferred)
+      :config
+      (setq js-indent-level 2)
+      (setq lsp-javascript-suggestion-actions-enabled nil)
+      (setq lsp-typescript-suggestion-actions-enabled nil))
 #+end_src
-
+ 
+** ng2 Mode for Angular
+#+begin_src emacs-lisp
+  (use-package ng2-mode
+    :ensure t
+    :hook
+    (ng2-mode . lsp-deferred)
+    (ng2-ts-mode . lsp-deferred)
+    (ng2-html-mode . lsp-deferred))
+#+end_src
+ 
 ** RJSX mode
 #+begin_src emacs-lisp
   (use-package rjsx-mode
@@ -1049,8 +1079,8 @@ This is a very important packages for me. Because I like to open only one dired 
         :config
         (add-hook 'sql-mode-hook 'sqlup-mode)
         (add-hook 'sql-mode-hook 'sqlind-minor-mode))
-
 #+end_src
+ 
 ** Python
 #+begin_src emacs-lisp
 
@@ -1072,7 +1102,6 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+end_src
 
-
 ** Shell Mode
 #+begin_src emacs-lisp
   (use-package sh-script
@@ -1080,6 +1109,7 @@ This is a very important packages for me. Because I like to open only one dired 
     :config
     (setq sh-basic-offset 2))
 #+end_src
+ 
 * Other Tools
 ** Perspective
 #+begin_src emacs-lisp
