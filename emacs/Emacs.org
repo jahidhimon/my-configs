@@ -473,7 +473,7 @@ This package colorizes brackets like rainbow
     (org-roam-setup))
 #+end_src
 
-** Org Pomodor
+** Org Pomodoro
 #+begin_src emacs-lisp
   (use-package org-pomodoro
     :custom-face
@@ -485,24 +485,6 @@ This package colorizes brackets like rainbow
 
 #+end_src
 
-** Pomidor
-#+begin_src emacs-lisp
-
-  ;; A Simple and cool pomodoro timer
-  (use-package pomidor
-    :ensure t
-    :bind (("<f12>" . pomidor))
-    :init
-    (setq alert-default-style 'mode-line)
-    :config
-    (setq pomidor-sound-tick nil)
-    (setq pomidor-sound-tack nil)
-    (setq pomidor-seconds (* 25 60))
-    (setq pomidor-break-seconds (* 5 60))
-    (setq pomidor-breaks-before-long 3)
-    (setq pomidor-long-break-seconds (* 20 60)))
-
-#+end_src
 * Shell Modes
 ** Eshell configuration Function
 #+begin_src emacs-lisp
@@ -601,6 +583,12 @@ This is a very important packages for me. Because I like to open only one dired 
 #+end_src
 
 * Editing Tools
+** Disable Mouse
+#+begin_src emacs-lisp
+  (use-package disable-mouse
+    :init (global-disable-mouse-mode))
+#+end_src
+ 
 ** Multiple Cursors
 #+begin_src emacs-lisp
   (use-package multiple-cursors
@@ -899,7 +887,12 @@ This is a very important packages for me. Because I like to open only one dired 
     :ensure t)
 
 #+end_src
-
+** CMake Mode
+#+begin_src emacs-lisp
+  (use-package cmake-mode
+    :ensure t)
+#+end_src
+ 
 ** Common Lisp
 #+begin_src emacs-lisp
   (use-package slime

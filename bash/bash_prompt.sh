@@ -34,4 +34,4 @@ RLAMBDA="${RED}λ${NORMAL}"
 SELECT="if [ \$? = 0 ]; then echo \"${GLAMBDA}\"; else echo \"${RLAMBDA}\"; fi"
 
 # Throw it all together 
-PS1="${RESET}${GYELLOW}[${BCYAN}\W${NORMAL}${GYELLOW}] \`${SELECT}\` ${NORMAL}"
+PS1="${GYELLOW}[${BCYAN}\W${NORMAL}${GYELLOW}] \`${SELECT}\` ${NORMAL}"

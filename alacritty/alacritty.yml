@@ -55,7 +55,7 @@ colors:
 bell:
   animation: EaseOutExpo
   duration: 0
-background_opacity: 0.9
+window_opacity: 0.9
 mouse_bindings:
   - mouse: Middle
     action: PasteSelection
