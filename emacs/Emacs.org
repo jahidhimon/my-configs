@@ -1161,3 +1161,22 @@ In Emacs 28.1 "M-n" and "M-p" became "n" and "p".
   ;; global key for `multi-occur-in-this-mode' - you should change this.
   (global-set-key (kbd "C-M-s") 'multi-occur-in-this-mode)
 #+end_src
+
+
+** ElFeed RSS Reader
+#+begin_src emacs-lisp
+      (use-package elfeed
+        :custom
+        (elfeed-feeds '(("https://news.ycombinator.com/rss" hacker)
+                        ("https://www.reddit.com/r/programming.rss" rprogramming)
+                        ("https://www.reddit.com/r/emacs.rss" remacs)
+                        ("https://www.reddit.com/r/golang.rss" rgolang)
+                        ("https://www.reddit.com/r/clojure.rss" rclojure)
+                        ("http://www.thecrazyprogrammer.com/feed/" crazyprogrammer)
+                        ("https://stackoverflow.blog/feed" stackoverflow)))
+        (url-queue-timeout 30)
+        (elfeed-search-title-max-width 100)
+        (elfeed-search-title-min-width 100)
+        :bind
+        ("C-x w" . 'elfeed))
+#+end_src
