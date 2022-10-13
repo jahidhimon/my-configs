@@ -1,0 +1,97 @@
+#+title My Emacs Configuration
+#+PROPERTY: header-args:emacs-lisp :tangle /home/imon/.emacs.d/minimal.el :mkdirp yes
+
+* System Configs
+** Configure package archives
+#+begin_src emacs-lisp
+
+  (require 'package)
+
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+  ("org" . "https://orgmode.org/elpa/")
+  ("elpa" . "https://elpa.gnu.org/packages/")))
+
+#+end_src
+
+** Configure use package
+#+begin_src emacs-lisp
+
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
+
+  ;; Initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
+
+#+end_src
+** System Clean
+*** Move Backup Files to tmp/backups
+
+#+begin_src emacs-lisp
+
+  (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups" user-emacs-directory))))
+
+#+end_src
+
+*** Move Auto Save Files to tmp/auto-saves
+
+#+begin_src emacs-lisp
+
+  (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
+  (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions" user-emacs-directory)
+        auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+
+  (setq create-lockfiles nil)
+
+#+end_src
+
+*** Disable Lockfiles
+#+begin_src emacs-lisp
+
+  (setq create-lockfiles nil)
+
+#+end_src
+
+** GC Threshold
+Make gc pauses faster by decreasing the threshold.
+#+begin_src emacs-lisp
+
+  (setq gc-cons-threshold (* 2 1000 1000))
+
+#+end_src
+** FullSCreen
+#+begin_src emacs-lisp
+(toggle-frame-fullscreen)
+#+end_src
+
+* UI configs
+** Basic UI
+
+#+begin_src emacs-lisp
+
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)        ; Give some breathing room
+  (setq indent-tabs-mode nil)
+
+  (menu-bar-mode -1)            ; Disable the menu bar
+
+  (setq inhibit-startup-message t) ;; Disable splash screen
+
+  ;; Set up the visible bell
+  ;; (setq visible-bell t)
+
+#+end_src
+
+** Theme Settings
+#+begin_src emacs-lisp
+(use-package gru
+  :init (load-theme 'doom-one t))
+
+(use-package all-the-icons)
+
+#+end_src

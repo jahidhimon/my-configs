@@ -160,11 +160,21 @@ Make gc pauses faster by decreasing the threshold.
   (use-package zenburn-theme
     :ensure t)
 
-  (load-theme 'doom-solarized-dark-high-contrast t)
-
   (use-package all-the-icons
     :config (setq all-the-icons-scale-factor 1.1))
 
+  (use-package heaven-and-hell
+    :ensure t
+    :init
+    (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
+    (setq heaven-and-hell-themes
+          '((light . doom-gruvbox-light)
+            (dark . doom-solarized-dark-high-contrast))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
+    ;; Optionall, load themes without asking for confirmation.
+    (setq heaven-and-hell-load-theme-no-confirm t)
+    :hook (after-init . heaven-and-hell-init-hook)
+    :bind ("<f6>" . heaven-and-hell-toggle-theme))
+  
 #+end_src
 *** Doom Modeline
 #+begin_src emacs-lisp
@@ -205,7 +215,15 @@ This package colorizes brackets like rainbow
 #+begin_src emacs-lisp
   (save-place-mode 1)
 #+end_src
- 
+
+*** Winner mode
+#+begin_src emacs-lisp
+  (winner-mode)
+  (global-unset-key (kbd "C-c <left>"))
+  (global-unset-key (kbd "C-c right"))
+  (global-set-key (kbd "C-`") 'winner-undo)
+  (global-set-key (kbd "C-c C-`") 'winner-redo)
+#+end_src
 * Keyboard Setup
 ** Which key
 
@@ -224,23 +242,19 @@ This package colorizes brackets like rainbow
 ** Ivy Setup
 
 #+begin_src emacs-lisp
-(use-package ivy
-  :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :config
-  (ivy-mode 1))
+  (use-package ivy
+    :diminish
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)
+           ("C-l" . ivy-alt-done)
+           :map ivy-switch-buffer-map
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-d" . ivy-reverse-i-search-kill))
+    :config
+    (ivy-mode 1))
 
 #+end_src
 
@@ -301,74 +315,20 @@ This package colorizes brackets like rainbow
 
 #+end_src
 
-* Flyspell Mode
-** Buffer specific
+* Hydra
 #+begin_src emacs-lisp
-
-  (defun flyspell-on-for-buffer-type ()
-        (interactive)
-        (if (not (symbol-value flyspell-mode)) ; if not already on
-    (progn
-      (if (derived-mode-p 'prog-mode)
-        (progn
-          (message "Flyspell on (code)")
-          (flyspell-prog-mode))
-        ;; else
-        (progn
-          (message "Flyspell on (text)")
-          (flyspell-mode 1)))
-      ;; I tried putting (flyspell-buffer) here but it didn't seem to work
-      )))
-
+  (use-package hydra
+    :ensure t)
 #+end_src
 
-** Auto save functions
+** Zoom
 #+begin_src emacs-lisp
-  (defun append-aspell-word (new-word)
-   (let ((header "personal_ws-1.1")
-         (file-name (substitute-in-file-name "$HOME/.aspell.en.pws"))
-         (read-words (lambda (file-name)
-                      (let ((all-lines (with-temp-buffer
-                                        (insert-file-contents file-name)
-                                        (split-string (buffer-string) "\n" t))))
-                       (if (null all-lines)
-                         ""
-                        (split-string (mapconcat 'identity (cdr all-lines) "\n")
-                                      nil 
-                                      t))))))
-    (when (file-readable-p file-name)
-     (let* ((cur-words (eval (list read-words file-name)))
-            (all-words (delq header (cons new-word cur-words)))
-            (words (delq nil (remove-duplicates all-words :test 'string=))))
-      (with-temp-file file-name     
-       (insert (concat header 
-                       " en "
-                       (number-to-string (length words))
-                       "\n"
-                       (mapconcat 'identity (sort words #'string<) "\n"))))))
-    (unless (file-readable-p file-name)
-     (with-temp-file file-name
-      (insert (concat header " en 1\n" new-word "\n")))))
-   (ispell-kill-ispell t) ; restart ispell
-   (flyspell-mode)
-   (flyspell-mode))
-
-  (defun append-aspell-current ()
-   "Add current word to aspell dictionary"
-   (interactive)
-   (append-aspell-word (thing-at-point 'word)))
-
+  (defhydra hydra-zoom (global-map "C-M-=")
+    "zoom"
+    ("g" text-scale-increase "in")
+    ("l" text-scale-decrease "out"))
 #+end_src
  
-** Flycheck mode use-package
-#+begin_src emacs-lisp
-
-  (use-package flyspell
-    :ensure t
-    :config (setq flyspell-issue-message-flag nil))
-
-#+end_src
-
 * Org Mode
 ** Org Font Setup
 #+begin_src emacs-lisp
@@ -428,6 +388,7 @@ This package colorizes brackets like rainbow
     (org-agenda-files
      '("~/codes/orgs/Tasks.org"
        "~/codes/orgs/Habits.org"))
+    (org-deadline-warning-days 5)
     (org-load-done 'time)
     (org-refile-targets
      '(("Archives.org" :maxlevel . 1)))
@@ -524,6 +485,18 @@ This package colorizes brackets like rainbow
   (eshell-git-prompt-use-theme 'powerline)) 
 #+end_src
 
+** Async-Shell-Mode && Compilation
+#+begin_src emacs-lisp
+  (add-hook 'shell-mode-hook (lambda ()
+                               (switch-to-buffer "*Async Shell Command*")
+                               (view-mode)))
+
+  (defadvice compile (around split-horizontally activate)
+    (let ((split-height-threshold 0)
+          (split-width-threshold nil))
+      ad-do-it))
+#+end_src
+ 
 * Dired
 ** Dired use-package
 
@@ -587,8 +560,8 @@ This is a very important packages for me. Because I like to open only one dired 
 * Editing Tools
 ** Disable Mouse
 #+begin_src emacs-lisp
-  (use-package disable-mouse
-    :init (global-disable-mouse-mode))
+  (use-package disable-mouse)
+  ;; (global-disable-mouse-mode)
 #+end_src
  
 ** Multiple Cursors
@@ -681,7 +654,33 @@ This is a very important packages for me. Because I like to open only one dired 
         (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))))
 
 #+end_src
-  
+ 
+** Visual Bookmark
+#+begin_src emacs-lisp
+  (use-package bm
+    :ensure t
+    :init
+    (setq bm-restore-repository-on-load t)
+    :config
+    (setq bm-cycle-all-buffers t)
+    (setq bm-repository-file "~/.emacs.d/bm-repository")
+    (setq-default bm-buffer-persistence t)
+    (add-hook 'after-init-hook 'bm-repository-load)
+    (add-hook 'kill-buffer-hook #'bm-buffer-save)
+    (add-hook 'kill-emacs-hook #'(lambda nil
+                                   (bm-buffer-save-all)
+                                   (bm-repository-save)))
+    (add-hook 'after-save-hook #'bm-buffer-save)
+    ;; Restoring bookmarks
+    (add-hook 'find-file-hooks   #'bm-buffer-restore)
+    (add-hook 'after-revert-hook #'bm-buffer-restore)
+    (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
+    :bind (("<f2>" . bm-next)
+           ("S-<f2>" . bm-previous)
+           ("C-<f2>" . bm-toggle))) 
+
+#+end_src
+ 
 * Programming tools and Tweaks
 ** Magit
 #+begin_src emacs-lisp
@@ -756,20 +755,21 @@ This is a very important packages for me. Because I like to open only one dired 
 
 ** Projectile
 #+begin_src emacs-lisp
-  (use-package projectile
-    :diminish projectile-mode
-    :config (projectile-mode)
-    :bind-keymap
-    ("C-c p" . projectile-command-map)
-    :init
-    (setq projectile-indexing-method 'native)
-    (setq projectile-project-search-path
-          '("~/codes/c/" "~/codes/cpp" "~/codes/cl" "~/codes/clojure" "~/codes/elixir" "~/codes/go"
-            "~/codes/haskell" "~/codes/nodejs/" "~/codes/ruby/" "~/codes/py/" "~/codes/web" "~/codes/shell/"))
-    (setq projectile-switch-project-action #'projectile-find-file))
+    (use-package projectile
+      :diminish projectile-mode
+      :config (projectile-mode)
+      :bind-keymap
+      ("C-c p" . projectile-command-map)
+      :init
+      (setq projectile-indexing-method 'native)
+      (setq projectile-project-search-path
+            '("~/codes/c/" "~/codes/cpp" "~/codes/cl" "~/codes/clojure" "~/codes/elixir" "~/codes/go"
+              "~/codes/haskell" "~/codes/nodejs/" "~/codes/ruby/" "~/codes/python/" "~/codes/web"
+              "~/codes/shell/" "~/codes/scheme/"))
+      (setq projectile-switch-project-action #'projectile-find-file))
 
-  (use-package counsel-projectile ;; This package binds counsel and projectile together
-    :config (counsel-projectile-mode))
+    (use-package counsel-projectile ;; This package binds counsel and projectile together
+      :config (counsel-projectile-mode))
 
 #+end_src
 
@@ -785,6 +785,7 @@ This is a very important packages for me. Because I like to open only one dired 
     :hook (lsp-mode . efs/lsp-mode-setup)
     :init
     (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-header-insertion=never"))
     :config
     (lsp-enable-which-key-integration t))
 
@@ -887,8 +888,8 @@ This is a very important packages for me. Because I like to open only one dired 
         c-basic-offset 2)
   (use-package flycheck-pkg-config
     :ensure t)
-
 #+end_src
+ 
 ** CMake Mode
 #+begin_src emacs-lisp
   (use-package cmake-mode
@@ -957,6 +958,20 @@ This is a very important packages for me. Because I like to open only one dired 
       (setq lsp-javascript-suggestion-actions-enabled nil)
       (setq lsp-typescript-suggestion-actions-enabled nil))
 #+end_src
+
+** Latex Mode
+#+begin_src emacs-lisp
+  (use-package auctex
+    :ensure t
+    :defer t
+    :config (setq TeX-view-progra-selection '(((output-dvi has-no-display-manager)
+                                               "dvi2tty")
+                                              ((output-dvi style-pstricks)
+                                               "dvips and gv")
+                                              (output-dvi "xdvi")
+                                              (output-pdf "atril")
+                                              (output-html "xdg-open"))))
+#+end_src
  
 ** ng2 Mode for Angular
 #+begin_src emacs-lisp
@@ -968,15 +983,6 @@ This is a very important packages for me. Because I like to open only one dired 
     (ng2-html-mode . lsp-deferred))
 #+end_src
  
-** RJSX mode
-#+begin_src emacs-lisp
-  (use-package rjsx-mode
-    :mode "\\.jsx\\'"
-    :hook (rjsx-mode . lsp-deferred)
-    :config
-    (setq js-indent-level 2))
-#+end_src
-
 ** Ruby Mode
 #+begin_src emacs-lisp
   (use-package ruby-mode
@@ -1016,27 +1022,6 @@ This is a very important packages for me. Because I like to open only one dired 
 
 #+end_src
 
-** Python
-#+begin_src emacs-lisp
-
-  (use-package python-mode
-    :ensure nil
-    :hook (python-mode . lsp-deferred)
-    :custom
-    (dap-python-executable "python3")
-    (dap-python-debugger 'debugpy)
-    (flycheck-python-flake8-executable "flake8")
-    (lsp-pylsp-plugins-autopep8-enabled t)
-    :config
-    (flycheck-select-checker 'python-flake8)
-    (require 'dap-python))
-
-  (use-package pyvenv
-    :config
-    (pyvenv-mode 1))
-
-#+end_src
-
 ** Go
 #+begin_src emacs-lisp
   (use-package go-mode
@@ -1055,6 +1040,7 @@ This is a very important packages for me. Because I like to open only one dired 
   (add-hook 'sgml-mode-hook 'emmet-mode)
   (add-hook 'css-mode-hook  'emmet-mode)
   (add-hook 'js2-mode-hook 'emmet-mode)
+  (add-hook 'web-mode-hook 'emmet-mode)
 #+end_src
  
 ** JSON
@@ -1065,24 +1051,31 @@ This is a very important packages for me. Because I like to open only one dired 
 
 ** SQL mode
 #+begin_src emacs-lisp
-      (use-package sqlup-mode
-        :ensure t
-        :config
-        (add-hook 'sql-interactive-mode-hook 'sqlup-mode)
-        (add-to-list 'sqlup-blacklist "name")
-        (add-to-list 'sqlup-blacklist "id")
-        (add-to-list 'sqlup-blacklist "year")
-        (add-to-list 'sqlup-blacklist "version"))
+  (use-package sqlup-mode
+    :ensure t
+    :config
+    (add-hook 'sql-interactive-mode-hook 'sqlup-mode)
+    (add-to-list 'sqlup-blacklist "name")
+    (add-to-list 'sqlup-blacklist "id")
+    (add-to-list 'sqlup-blacklist "year")
+    (add-to-list 'sqlup-blacklist "version"))
 
-      (use-package sql-indent
-        :ensure t)
+  (use-package sql-indent
+    :ensure t)
 
-      (use-package sql
-        :init
-        (setq sql-set-product 'postgres)
-        :config
-        (add-hook 'sql-mode-hook 'sqlup-mode)
-        (add-hook 'sql-mode-hook 'sqlind-minor-mode))
+  (use-package sql
+    :init
+    (setq sql-set-product 'postgres)
+    :config
+    (add-hook 'sql-mode-hook 'sqlup-mode)
+    (add-hook 'sql-mode-hook 'sqlind-minor-mode))
+#+end_src
+
+** Scheme
+#+begin_src emacs-lisp
+  (setq scheme-program-name "guile")
+  (use-package geiser-guile
+    :ensure t)
 #+end_src
  
 ** Python
@@ -1092,6 +1085,7 @@ This is a very important packages for me. Because I like to open only one dired 
     :ensure nil
     :hook (python-mode . lsp-deferred)
     :custom
+    (python-indent-offset 4)
     (dap-python-executable "python3")
     (dap-python-debugger 'debugpy)
     (flycheck-python-flake8-executable "flake8")
@@ -1113,7 +1107,13 @@ This is a very important packages for me. Because I like to open only one dired 
     :config
     (setq sh-basic-offset 2))
 #+end_src
- 
+
+** Web-mode
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :hook (mhtml-mode . web-mode))
+#+end_src
+
 * Other Tools
 ** Perspective
 #+begin_src emacs-lisp

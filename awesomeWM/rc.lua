@@ -72,7 +72,7 @@ awful.spawn.with_shell(
 
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "kitty"
+local terminal     = "alacritty"
 local vi_focus     = false -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
 local editor       = os.getenv("EDITOR") or "runemacs"
@@ -231,7 +231,7 @@ globalkeys = my_table.join(
     --           {description = "take a screenshot", group = "hotkeys"}),
 
     -- X screen locker
-    awful.key({ altkey, "Control" }, "l", function () os.execute(scrlocker) end,
+    awful.key({ modkey, "Control" }, "l", function () os.execute(scrlocker) end,
               {description = "lock screen", group = "hotkeys"}),
 
     -- Hotkeys
@@ -252,13 +252,13 @@ globalkeys = my_table.join(
               {description = "view  previous nonempty", group = "tag"}),
 
     -- Default client focus
-    awful.key({ altkey,           }, "j",
+    awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
         end,
         {description = "focus next by index", group = "client"}
     ),
-    awful.key({ altkey,           }, "k",
+    awful.key({ modkey,           }, "k",
         function ()
             awful.client.focus.byidx(-1)
         end,
@@ -298,9 +298,9 @@ globalkeys = my_table.join(
               {description = "swap with next client by index", group = "client"}),
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
               {description = "swap with previous client by index", group = "client"}),
-    awful.key({ altkey,           }, "l", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey,           }, "l", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
-    awful.key({ altkey,           }, "h", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey,           }, "h", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
@@ -352,9 +352,9 @@ globalkeys = my_table.join(
           {definitions = "Toggle useless gaps", group = "awesome"}),
 
     -- On the fly useless gaps change
-    awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end,
+    awful.key({ modkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end,
               {description = "increment useless gaps", group = "tag"}),
-    awful.key({ altkey, "Control" }, "-", function () lain.util.useless_gaps_resize(-1) end,
+    awful.key({ modkey, "Control" }, "-", function () lain.util.useless_gaps_resize(-1) end,
               {description = "decrement useless gaps", group = "tag"}),
 
     -- Dynamic tagging
@@ -377,14 +377,10 @@ globalkeys = my_table.join(
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
-    awful.key({ altkey, "Shift"   }, "l",     function () awful.tag.incmwfact( 0.05)          end,
+    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
-    awful.key({ altkey, "Shift"   }, "h",     function () awful.tag.incmwfact(-0.05)          end,
+    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
-              {description = "increase the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
-              {description = "decrease the number of master clients", group = "layout"}),
     awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
@@ -412,9 +408,6 @@ globalkeys = my_table.join(
     -- Widgets popups
     -- awful.key({ altkey, }, "c", function () if beautiful.cal then beautiful.cal.show(7) end end,
     --           {description = "show calendar", group = "widgets"}),
-    awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
-              {description = "show filesystem", group = "widgets"}),
-
     -- Brightness
     awful.key({ modkey, altkey }, "Up", function () os.execute("xbacklight -inc 10") end,
               {description = "brightness +10%", group = "hotkeys"}),
@@ -441,44 +434,44 @@ globalkeys = my_table.join(
         end,
         {description = "toggle mute", group = "hotkeys"}),
 
-    -- MPD control
-    awful.key({ altkey, "Control" }, "Up",
-        function ()
-            os.execute("mpc toggle")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc toggle", group = "widgets"}),
-    awful.key({ altkey, "Control" }, "Down",
-        function ()
-            os.execute("mpc stop")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc stop", group = "widgets"}),
-    awful.key({ altkey, "Control" }, "Left",
-        function ()
-            os.execute("mpc prev")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc prev", group = "widgets"}),
-    awful.key({ altkey, "Control" }, "Right",
-        function ()
-            os.execute("mpc next")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc next", group = "widgets"}),
-    awful.key({ altkey }, "0",
-        function ()
-            local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
-            if beautiful.mpd.timer.started then
-                beautiful.mpd.timer:stop()
-                common.text = common.text .. lain.util.markup.bold("OFF")
-            else
-                beautiful.mpd.timer:start()
-                common.text = common.text .. lain.util.markup.bold("ON")
-            end
-            naughty.notify(common)
-        end,
-        {description = "mpc on/off", group = "widgets"}),
+    -- -- MPD control
+    -- awful.key({ altkey, "Control" }, "Up",
+    --     function ()
+    --         os.execute("mpc toggle")
+    --         beautiful.mpd.update()
+    --     end,
+    --     {description = "mpc toggle", group = "widgets"}),
+    -- awful.key({ altkey, "Control" }, "Down",
+    --     function ()
+    --         os.execute("mpc stop")
+    --         beautiful.mpd.update()
+    --     end,
+    --     {description = "mpc stop", group = "widgets"}),
+    -- awful.key({ altkey, "Control" }, "Left",
+    --     function ()
+    --         os.execute("mpc prev")
+    --         beautiful.mpd.update()
+    --     end,
+    --     {description = "mpc prev", group = "widgets"}),
+    -- awful.key({ altkey, "Control" }, "Right",
+    --     function ()
+    --         os.execute("mpc next")
+    --         beautiful.mpd.update()
+    --     end,
+    --     {description = "mpc next", group = "widgets"}),
+    -- awful.key({ altkey }, "0",
+    --     function ()
+    --         local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
+    --         if beautiful.mpd.timer.started then
+    --             beautiful.mpd.timer:stop()
+    --             common.text = common.text .. lain.util.markup.bold("OFF")
+    --         else
+    --             beautiful.mpd.timer:start()
+    --             common.text = common.text .. lain.util.markup.bold("ON")
+    --         end
+    --         naughty.notify(common)
+    --     end,
+    --     {description = "mpc on/off", group = "widgets"}),
 
     -- Copy primary to clipboard (terminals to gtk)
     -- awful.key({ modkey }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,
@@ -490,7 +483,7 @@ globalkeys = my_table.join(
     -- User programs
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
               {description = "run browser", group = "launcher"}),
-    awful.key({ modkey }, "e", function () awful.spawn("thunar") end,
+    awful.key({ modkey }, "e", function () awful.spawn("pcmanfm") end,
               {description = "launch file_manager", group = "launcher"}),
     awful.key({ }, "XF86Calculator", function () awful.spawn("speedcrunch") end,
               {description = "lauch speedCruch calculator", group = "launcher"}),
@@ -531,9 +524,8 @@ globalkeys = my_table.join(
 -- 		 -color-urgent "#222222, #b1b4b3, #222222, #77003d, #b1b4b3" \
 -- 		 -kb-row-select "Tab" -kb-row-tab ""
     -- Rofi
-    awful.key({ altkey }, "p", function ()
-            -- os.execute(string.format("rofi -lines 5 -columns 3 -font \"mono 9\" -modi combi -combi-modi window,run,drun,ssh -show run -display-run '' -theme glue_pro_blue -opacity 10"))
-            os.execute("rofi -show run -display-run '' -modi run -location 1 -width 100 -lines 2 -line-margin 0 -line-padding 1 -separator-style none -font 'mono 9' -columns 9 -hide-scrollbar -theme glue_pro_blue")
+    awful.key({ modkey }, "p", function ()
+            os.execute("rofi -show run -display-run '' -modi run -line-margin 0 -line-padding 1 -separator-style none -font 'JetbrainsMono 9.5' -hide-scrollbar -theme glue_pro_blue")
         end,
               {description = "run Rofi", group = "launcher"}),
 
@@ -555,7 +547,7 @@ globalkeys = my_table.join(
 )
 
 clientkeys = my_table.join(
-    awful.key({ altkey, "Shift"   }, "m",      lain.util.magnify_client,
+    awful.key({ modkey, "Shift"   }, "m",      lain.util.magnify_client,
               {description = "magnify client", group = "client"}),
     awful.key({ modkey,           }, "f",
         function (c)
@@ -592,58 +584,61 @@ clientkeys = my_table.join(
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9 do
-    -- Hack to only show tags 1 and 9 in the shortcut window (mod+s)
-    local descr_view, descr_toggle, descr_move, descr_toggle_focus
-    if i == 1 or i == 9 then
-        descr_view = {description = "view tag #", group = "tag"}
-        descr_toggle = {description = "toggle tag #", group = "tag"}
-        descr_move = {description = "move focused client to tag #", group = "tag"}
-        descr_toggle_focus = {description = "toggle focused client on tag #", group = "tag"}
-    end
-    globalkeys = my_table.join(globalkeys,
-        -- View tag only.
-        awful.key({ modkey }, "#" .. i + 9,
-                  function ()
-                        local screen = awful.screen.focused()
-                        local tag = screen.tags[i]
-                        if tag then
-                           tag:view_only()
-                        end
-                  end,
-                  descr_view),
-        -- Toggle tag display.
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
-                  function ()
-                      local screen = awful.screen.focused()
-                      local tag = screen.tags[i]
-                      if tag then
-                         awful.tag.viewtoggle(tag)
-                      end
-                  end,
-                  descr_toggle),
-        -- Move client to tag.
-        awful.key({ modkey, "Shift" }, "#" .. i + 9,
-                  function ()
-                      if client.focus then
-                          local tag = client.focus.screen.tags[i]
-                          if tag then
-                              client.focus:move_to_tag(tag)
-                          end
-                     end
-                  end,
-                  descr_move),
-        -- Toggle tag on focused client.
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
-                  function ()
-                      if client.focus then
-                          local tag = client.focus.screen.tags[i]
-                          if tag then
-                              client.focus:toggle_tag(tag)
-                          end
-                      end
-                  end,
-                  descr_toggle_focus)
-    )
+	 -- Hack to only show tags 1 and 9 in the shortcut window (mod+s)
+	 local descr_view, descr_toggle, descr_move, descr_toggle_focus
+	 if i == 1 or i == 9 then
+			descr_view = {description = "view tag #", group = "tag"}
+			descr_toggle = {description = "toggle tag #", group = "tag"}
+			descr_move = {description = "move focused client to tag #", group = "tag"}
+			descr_toggle_focus = {description = "toggle focused client on tag #", group = "tag"}
+	 end
+	 globalkeys = my_table.join(
+			globalkeys,
+			-- View tag only.
+			awful.key({ modkey }, "#" .. i + 9,
+				 function ()
+						--local screen = awful.screen.focused()
+						for s in screen do
+							 local tag = s.tags[i]
+							 if tag then
+									tag:view_only()
+							 end
+						end
+				 end,
+				 descr_view),
+			-- Toggle tag display.
+			awful.key({ modkey, "Control" }, "#" .. i + 9,
+				 function ()
+						local screen = awful.screen.focused()
+						local tag = screen.tags[i]
+						if tag then
+							 awful.tag.viewtoggle(tag)
+						end
+				 end,
+				 descr_toggle),
+			-- Move client to tag.
+			awful.key({ modkey, "Shift" }, "#" .. i + 9,
+				 function ()
+						if client.focus then
+							 local tag = client.focus.screen.tags[i]
+							 if tag then
+									client.focus:move_to_tag(tag)
+							 end
+						end
+				 end,
+				 descr_move),
+			-- Toggle tag on focused client.
+			awful.key({ modkey, "Control", "Shift" }, "#" .. i + 5,
+				 function ()
+						if client.focus then
+							 local tag = client.focus.screen.tags[i]
+							 if tag then
+									client.focus:toggle_tag(tag)
+							 end
+						end
+				 end,
+				 descr_toggle_focus)
+	 )
 end
 
 clientbuttons = gears.table.join(
@@ -686,8 +681,8 @@ awful.rules.rules = {
       properties = { titlebars_enabled = false } },
 
     -- Set Emacs to always map on the first tag on screen 1.
-    { rule = { instance = "emacs" },
-      properties = { screen = 2, tag = awful.util.tagnames[1], fullscreen=true , switchtotag=true} },
+--    { rule = { instance = "emacs" },
+--    properties = { screen = 3, tag = awful.util.tagnames[1], fullscreen=true , switchtotag=true} },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
@@ -728,16 +723,17 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 -- Session startup
 -- awful.spawn.with_shell("xrandr --output eDP1 --primary --mode 1366x768 --output DP1 --mode 1366x768 --right-of eDP1")
-awful.spawn.with_shell("xcompmgr")
-awful.spawn.with_shell("thunar --daemon")
-awful.spawn.with_shell("birdtray")
+-- awful.spawn.with_shell("xrandr --output eDP-1 --primary --mode 1366x768 --output DP-1 --mode 1366x768 --left-of eDP-1 --output HDMI-1 --mode 1366x768 --left-of DP-1")
+awful.spawn.with_shell("emacs --daemon")
+-- awful.spawn.with_shell("xcompmgr")
+-- awful.spawn.with_shell("thunar --daemon")
+-- awful.spawn.with_shell("nitrogen --restore")
+-- awful.spawn.with_shell("birdtray")
 awful.spawn.with_shell("/usr/libexec/polkit-gnome-authentication-agent-1")
 -- awful.spawn.with_shell("fehbg &")
-awful.spawn.with_shell("nitrogen --restore")
--- awful.spawn.with_shell("emacs --daemon")
 
 
-beautiful.useless_gap = 5
+beautiful.useless_gap = 2
 beautiful.tasklist_align = "center"
 
 beautiful.notification_icon_size= 64
@@ -747,4 +743,3 @@ beautiful.notification_icon_size= 64
 -- beautiful.tasklist_shape.
 
 -- naughty.icon_size(64)
-
